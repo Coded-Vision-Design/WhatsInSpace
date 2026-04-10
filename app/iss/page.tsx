@@ -113,7 +113,7 @@ export default function ISSPage() {
       <Header alwaysVisible />
 
       {/* Hero with scroll-driven zoom */}
-      <section ref={heroRef} className="relative pt-24 pb-8 md:pt-32 md:pb-12 overflow-hidden">
+      <section ref={heroRef} className="relative pt-24 pb-4 md:pt-28 md:pb-6 overflow-hidden">
         <StarField starCount={700} />
         <div className="relative z-10 max-w-6xl mx-auto px-6">
           <div className="text-center mb-8">
