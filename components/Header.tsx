@@ -50,10 +50,8 @@ export default function Header({ alwaysVisible = false }: HeaderProps) {
     return () => clearTimeout(timer)
   }, [alwaysVisible])
 
-  const handleHashClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    const hash = href.split("#")[1]
-    if (!hash) return
-    const target = document.getElementById(hash)
+  const handleHashClick = (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
+    const target = document.getElementById(sectionId)
     if (!target) return
     e.preventDefault()
     // Skip hero animation: unlock scroll, show header, scroll to section
@@ -62,6 +60,8 @@ export default function Header({ alwaysVisible = false }: HeaderProps) {
     setSolid(true)
     window.dispatchEvent(new CustomEvent("skip-hero-animation"))
     target.scrollIntoView({ behavior: "smooth" })
+    // Clean URL: strip any hash fragment
+    history.replaceState(null, "", window.location.pathname)
   }
 
   useEffect(() => {
@@ -100,7 +100,7 @@ export default function Header({ alwaysVisible = false }: HeaderProps) {
       <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
         <Link href="/" className="text-xl font-bold text-white tracking-wider">ARTEMIS</Link>
         <nav className="hidden md:flex items-center gap-8">
-          <Link href="/#mission" onClick={(e) => handleHashClick(e, "/#mission")} className="text-white/50 hover:text-white text-sm transition-colors hover-underline">Mission</Link>
+          <Link href="/" onClick={(e) => handleHashClick(e, "mission")} className="text-white/50 hover:text-white text-sm transition-colors hover-underline">Mission</Link>
 
           {/* Crew with dropdown */}
           <div
@@ -109,8 +109,8 @@ export default function Header({ alwaysVisible = false }: HeaderProps) {
             onMouseLeave={closeCrew}
           >
             <Link
-              href="/#crew"
-              onClick={(e) => handleHashClick(e, "/#crew")}
+              href="/"
+              onClick={(e) => handleHashClick(e, "crew")}
               className="text-white/50 hover:text-white text-sm transition-colors flex items-center gap-1"
             >
               Crew
@@ -152,8 +152,8 @@ export default function Header({ alwaysVisible = false }: HeaderProps) {
                   </Link>
                 ))}
                 <Link
-                  href="/#crew"
-                  onClick={(e) => handleHashClick(e, "/#crew")}
+                  href="/"
+                  onClick={(e) => handleHashClick(e, "crew")}
                   className="flex items-center justify-center gap-1.5 px-4 py-2.5 border-t border-white/[0.06] text-xs text-white/40 hover:text-white/70 hover:bg-white/[0.04] transition-colors"
                 >
                   View all crew
@@ -226,7 +226,7 @@ export default function Header({ alwaysVisible = false }: HeaderProps) {
           </div>
           <Link href="/iss" className="text-white/50 hover:text-white text-sm transition-colors hover-underline">ISS</Link>
           <Link href="/news" className="text-white/50 hover:text-white text-sm transition-colors hover-underline">News</Link>
-          <Link href="/#trajectory" onClick={(e) => handleHashClick(e, "/#trajectory")} className="text-white/50 hover:text-white text-sm transition-colors hover-underline">Flight Path</Link>
+          <Link href="/" onClick={(e) => handleHashClick(e, "trajectory")} className="text-white/50 hover:text-white text-sm transition-colors hover-underline">Flight Path</Link>
         </nav>
         <div className="flex items-center gap-3">
           {isMissionLive && (
@@ -263,19 +263,19 @@ export default function Header({ alwaysVisible = false }: HeaderProps) {
       <div className={`md:hidden transition-all duration-300 overflow-hidden ${mobileOpen ? "max-h-[80vh] opacity-100" : "max-h-0 opacity-0"}`}>
         <div className="bg-black/95 backdrop-blur-xl border-t border-white/10 px-6 py-4 space-y-1">
           {[
-            { href: "/#mission", label: "Mission" },
-            { href: "/#crew", label: "Crew" },
+            { href: "/", label: "Mission", section: "mission" },
+            { href: "/", label: "Crew", section: "crew" },
             { href: "/technology", label: "Technology" },
             { href: "/solar-system", label: "Solar System" },
             { href: "/iss", label: "ISS" },
             { href: "/news", label: "News" },
-            { href: "/#trajectory", label: "Flight Path" },
-            { href: "/#gallery", label: "Gallery" },
+            { href: "/", label: "Flight Path", section: "trajectory" },
+            { href: "/", label: "Gallery", section: "gallery" },
           ].map((item, idx) => (
             <Link
-              key={item.href}
+              key={`${item.href}-${item.label}`}
               href={item.href}
-              onClick={(e) => { setMobileOpen(false); if (item.href.includes("#")) handleHashClick(e, item.href) }}
+              onClick={(e) => { setMobileOpen(false); if (item.section) handleHashClick(e, item.section) }}
               className="block py-3 text-white/60 hover:text-white text-sm border-b border-white/5 transition-all"
               style={{
                 opacity: mobileOpen ? 1 : 0,

@@ -112,7 +112,10 @@
     "SNAPI",
     "snapi",
     "exoplanets",
-    "tabular"
+    "tabular",
+    "gtag",
+    "googletagmanager",
+    "MGJBLHGP"
   ],
   "ignorePaths": [
     "node_modules",

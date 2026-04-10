@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
 import { crewData } from "@/lib/crew-data"
@@ -8,6 +9,21 @@ import { faArrowLeft, faRocket, faGraduationCap, faMapPin, faCalendarCheck } fro
 
 export function generateStaticParams() {
   return crewData.map((c) => ({ slug: c.slug }))
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params
+  const member = crewData.find((c) => c.slug === slug)
+  if (!member) return { title: "Not Found" }
+  return {
+    title: `${member.name} - ${member.role}`,
+    description: member.bio?.slice(0, 160) || `${member.name}, ${member.role} on the Artemis II mission. ${member.agency}.`,
+    openGraph: {
+      title: `${member.name} | Artemis II Crew`,
+      description: `${member.name}, ${member.role} on the Artemis II mission.`,
+      images: [{ url: member.image, alt: member.name }],
+    },
+  }
 }
 
 function XIcon() {

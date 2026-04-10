@@ -1,10 +1,47 @@
 import type { Metadata } from 'next'
+import Script from 'next/script'
 import './globals.css'
 import AnimatedFavicon from '@/components/AnimatedFavicon'
 
+const SITE_URL = 'https://whatsthatin.space'
+
 export const metadata: Metadata = {
-  title: 'Artemis | Return to the Moon',
-  description: 'Artemis program - NASA\'s next chapter of human space exploration. Returning to the Moon and preparing for the journey to Mars.',
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "What's That In Space? | Artemis Programme",
+    template: "%s | What's That In Space?",
+  },
+  description: "Interactive space education site covering the Artemis programme, the Solar System, the ISS, and the latest space news. Explore 3D models, live data, and more.",
+  keywords: ['Artemis', 'NASA', 'space', 'Moon', 'ISS', 'solar system', 'space news', 'space exploration', 'astronomy'],
+  authors: [{ name: 'Coded Vision Design', url: 'https://codedvisiondesign.co.uk' }],
+  creator: 'Coded Vision Design',
+  publisher: 'Coded Vision Design',
+  robots: { index: true, follow: true },
+  alternates: {
+    canonical: SITE_URL,
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_GB',
+    url: SITE_URL,
+    siteName: "What's That In Space?",
+    title: "What's That In Space? | Artemis Programme",
+    description: "Interactive space education site covering the Artemis programme, the Solar System, the ISS, and the latest space news.",
+    images: [
+      {
+        url: '/images/mission/moon-hero.webp',
+        width: 1200,
+        height: 630,
+        alt: "What's That In Space? - Explore the cosmos",
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "What's That In Space? | Artemis Programme",
+    description: "Interactive space education site covering the Artemis programme, the Solar System, the ISS, and the latest space news.",
+    images: ['/images/mission/moon-hero.webp'],
+  },
   icons: {
     icon: [
       {
@@ -35,6 +72,38 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+        {/* Google Analytics */}
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-8MGJBLHGP7" strategy="afterInteractive" />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-8MGJBLHGP7');`}
+        </Script>
+        {/* JSON-LD Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@graph': [
+                {
+                  '@type': 'WebSite',
+                  '@id': `${SITE_URL}/#website`,
+                  url: SITE_URL,
+                  name: "What's That In Space?",
+                  description: 'Interactive space education site covering the Artemis programme, the Solar System, the ISS, and the latest space news.',
+                  publisher: { '@id': `${SITE_URL}/#organisation` },
+                  inLanguage: 'en-GB',
+                },
+                {
+                  '@type': 'Organisation',
+                  '@id': `${SITE_URL}/#organisation`,
+                  name: 'Coded Vision Design',
+                  url: 'https://codedvisiondesign.co.uk',
+                  logo: `${SITE_URL}/icon.svg`,
+                },
+              ],
+            }),
+          }}
+        />
       </head>
       <body className="font-sans antialiased relative">
         {/* Noise Overlay */}
