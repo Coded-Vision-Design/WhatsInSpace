@@ -1,0 +1,31 @@
+{
+  "mission": "Artemis II",
+  "reference_frame": "event-waypoints-only",
+  "time_standard": "UTC",
+  "source_priority": ["NASA AROW ephemeris", "NASA/JPL Horizons"],
+  "waypoints": [
+    { "id": "launch", "label": "Launch", "utc": "2026-04-01T22:35:12Z", "met": "0/00:00:00", "type": "earth_departure" },
+    { "id": "solar_arrays_deployed", "label": "Solar arrays deployed", "utc": "2026-04-01T22:55:00Z", "met": "0/00:20:00", "type": "configuration" },
+    { "id": "perigee_raise_1", "label": "Perigee raise maneuver", "utc": "2026-04-01T23:25:02Z", "met": "0/00:49:50", "type": "earth_orbit_burn", "notes": "Orbit: 2223 x 185 km" },
+    { "id": "apogee_raise", "label": "Apogee raise maneuver", "utc": "2026-04-02T00:23:09Z", "met": "0/01:47:57", "type": "earth_orbit_burn", "notes": "Apogee: 70,377 km" },
+    { "id": "icps_separation", "label": "Orion/ICPS separation", "utc": "2026-04-02T01:59:30Z", "met": "0/03:24:18", "type": "separation" },
+    { "id": "perigee_raise_2", "label": "Perigee raise burn", "utc": "2026-04-02T11:30:00Z", "met": "0/12:55:00", "type": "earth_orbit_burn" },
+    { "id": "tli_start", "label": "TLI burn start", "utc": "2026-04-02T23:49:00Z", "met": "1/01:14:00", "type": "translunar_injection" },
+    { "id": "tli_end", "label": "TLI burn end", "utc": "2026-04-02T23:54:00Z", "met": "1/01:19:00", "type": "translunar_injection", "notes": "5m 55s, delta-v 388 m/s" },
+    { "id": "earth_shadow_entry", "label": "Earth shadow entry", "utc": "2026-04-03T00:10:00Z", "met": "1/01:35:00", "type": "lighting_event" },
+    { "id": "earth_shadow_exit", "label": "Earth shadow exit", "utc": "2026-04-03T01:17:00Z", "met": "1/02:41:00", "type": "lighting_event" },
+    { "id": "otc3_start", "label": "Correction burn 3 start", "utc": "2026-04-06T03:03:17Z", "met": "4/04:28:05", "type": "trajectory_correction" },
+    { "id": "otc3_end", "label": "Correction burn 3 end", "utc": "2026-04-06T03:03:35Z", "met": "4/04:28:23", "type": "trajectory_correction", "notes": "18 sec, 3 m/s" },
+    { "id": "lunar_soi_entry", "label": "Enter lunar sphere of influence", "utc": "2026-04-06T05:38:44Z", "met": "4/07:03:32", "type": "moon_approach", "notes": "62,800 km from Moon" },
+    { "id": "closest_approach_moon", "label": "Closest approach to Moon", "utc": "2026-04-06T23:01:00Z", "met": "5/00:26:00", "type": "lunar_flyby", "notes": "8,282 km from Moon center" },
+    { "id": "max_distance_earth", "label": "Max distance from Earth", "utc": "2026-04-06T23:05:00Z", "met": "5/00:30:00", "type": "deep_space_peak", "notes": "413,146.2 km from Earth" },
+    { "id": "lunar_soi_exit", "label": "Exit lunar sphere of influence", "utc": "2026-04-07T16:23:00Z", "met": "5/18:52:00", "type": "moon_departure", "notes": "62,800 km from Moon" },
+    { "id": "rtc1", "label": "Return correction burn 1", "utc": "2026-04-08T00:03:00Z", "met": "6/01:28:00", "type": "trajectory_correction", "notes": "0.49 m/s, 15 sec" },
+    { "id": "rtc2", "label": "Return correction burn 2", "utc": "2026-04-10T01:53:00Z", "met": "8/03:18:00", "type": "trajectory_correction", "notes": "1.62 m/s, 9 sec" },
+    { "id": "rtc3", "label": "Return correction burn 3", "utc": "2026-04-10T17:53:00Z", "met": "8/19:18:00", "type": "trajectory_correction" },
+    { "id": "service_module_separation", "label": "Service module separation", "utc": "2026-04-10T23:33:00Z", "met": "9/00:58:00", "type": "separation" },
+    { "id": "crew_module_raise_burn", "label": "Crew module raise burn", "utc": "2026-04-10T23:36:00Z", "met": "9/01:01:00", "type": "entry_prep" },
+    { "id": "entry_interface", "label": "Entry interface", "utc": "2026-04-10T23:53:00Z", "met": "9/01:18:00", "type": "reentry", "notes": "122 km above Earth" },
+    { "id": "splashdown", "label": "Splashdown", "utc": "2026-04-11T00:07:00Z", "met": "9/01:32:00", "type": "landing", "notes": "Pacific Ocean, off Baja California" }
+  ]
+}

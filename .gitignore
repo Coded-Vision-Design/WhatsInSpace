@@ -1,0 +1,49 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# Original TIF frame sequences (WebP conversions are committed instead)
+/public/nasa-iss-frames/*.tif
+/public/voyager-frames/*.tif
+
+# Root-level working GLB files (production copies in public/models/)
+/*.glb
+
+# Working images in root
+/CSA.png
+/nasa.webp
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Planning docs
+*-plan.md

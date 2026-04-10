@@ -1,0 +1,40 @@
+{
+  "name": "whats-that-in-space",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev",
+    "lint": "eslint .",
+    "spell": "cspell \"**/*.{ts,tsx,md}\" --no-progress",
+    "spell:fix": "cspell \"**/*.{ts,tsx,md}\" --no-progress --show-suggestions",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^7.2.0",
+    "@fortawesome/free-solid-svg-icons": "^7.2.0",
+    "@fortawesome/react-fontawesome": "^3.3.0",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.5.0",
+    "@types/three": "^0.183.1",
+    "autoprefixer": "^10.4.20",
+    "globe.gl": "^2.45.3",
+    "lucide-react": "^1.8.0",
+    "next": "16.0.10",
+    "ogl": "^1.0.11",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "three": "^0.183.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.9",
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "cspell": "^10.0.0",
+    "postcss": "^8.5",
+    "tailwindcss": "^4.1.9",
+    "tw-animate-css": "1.3.3",
+    "typescript": "^5"
+  }
+}

@@ -1,0 +1,8 @@
+# 3D models (public/models/ contains GLB files up to 20MB each)
+*.glb filter=lfs diff=lfs merge=lfs -text
+*.gltf filter=lfs diff=lfs merge=lfs -text
+# Large textures
+*.tif filter=lfs diff=lfs merge=lfs -text
+*.tiff filter=lfs diff=lfs merge=lfs -text
+public/models/*.glb filter=lfs diff=lfs merge=lfs -text
+public/textures/*.tif filter=lfs diff=lfs merge=lfs -text
