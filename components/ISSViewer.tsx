@@ -1,8 +1,8 @@
 "use client"
 
-import { Canvas, useFrame, useThree } from "@react-three/fiber"
+import { Canvas, useFrame } from "@react-three/fiber"
 import { useGLTF, OrbitControls, useAnimations } from "@react-three/drei"
-import { Suspense, useRef, useEffect, forwardRef, useImperativeHandle } from "react"
+import { Suspense, useRef, useEffect } from "react"
 import * as THREE from "three"
 
 function ISSModel() {
@@ -122,26 +122,7 @@ function TetherLine() {
   )
 }
 
-// Camera controller that responds to external zoom level
-function CameraZoom({ zoomLevel }: { zoomLevel: number }) {
-  const { camera } = useThree()
-
-  useFrame(() => {
-    // Interpolate camera distance: close (8) at zoom 0, far (20) at zoom 1
-    const targetDist = 8 + zoomLevel * 12
-    const currentDist = camera.position.length()
-    const newDist = currentDist + (targetDist - currentDist) * 0.05
-    camera.position.normalize().multiplyScalar(newDist)
-  })
-
-  return null
-}
-
-interface ISSViewerProps {
-  zoomLevel?: number
-}
-
-export default function ISSViewer({ zoomLevel = 0 }: ISSViewerProps) {
+export default function ISSViewer() {
   return (
     <div className="relative z-10 w-full aspect-[16/9] max-h-[50vh] overflow-hidden">
       <Canvas camera={{ position: [0, 3, 8], fov: 50 }} gl={{ antialias: true }} style={{ background: "#000" }}>
@@ -157,10 +138,11 @@ export default function ISSViewer({ zoomLevel = 0 }: ISSViewerProps) {
         </Suspense>
 
         <Stars />
-        <CameraZoom zoomLevel={zoomLevel} />
         <OrbitControls
-          enableZoom={false}
+          enableZoom
           enablePan={false}
+          minDistance={5}
+          maxDistance={20}
           autoRotate
           autoRotateSpeed={0.3}
         />

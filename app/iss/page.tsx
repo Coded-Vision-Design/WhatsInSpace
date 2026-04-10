@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useRef, useCallback } from "react"
+import { useEffect } from "react"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
 import dynamic from "next/dynamic"
@@ -64,36 +64,6 @@ const HISTORY = [
 ]
 
 export default function ISSPage() {
-  const [zoomLevel, setZoomLevel] = useState(0)
-  const heroRef = useRef<HTMLElement>(null)
-  const zoomComplete = useRef(false)
-
-  // Scroll-driven zoom: capture wheel in hero, zoom out, then release
-  const handleWheel = useCallback((e: WheelEvent) => {
-    if (zoomComplete.current) return // Already zoomed out, let page scroll
-
-    const delta = e.deltaY
-    if (delta > 0) {
-      // Scrolling down - zoom out
-      e.preventDefault()
-      setZoomLevel(prev => {
-        const next = Math.min(1, prev + delta * 0.002)
-        if (next >= 1) zoomComplete.current = true
-        return next
-      })
-    } else if (delta < 0 && !zoomComplete.current) {
-      // Scrolling up - zoom back in (only if not yet released)
-      e.preventDefault()
-      setZoomLevel(prev => Math.max(0, prev + delta * 0.002))
-    }
-  }, [])
-
-  useEffect(() => {
-    const hero = heroRef.current
-    if (!hero) return
-    hero.addEventListener("wheel", handleWheel, { passive: false })
-    return () => hero.removeEventListener("wheel", handleWheel)
-  }, [handleWheel])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -113,7 +83,7 @@ export default function ISSPage() {
       <Header alwaysVisible />
 
       {/* Hero with scroll-driven zoom */}
-      <section ref={heroRef} className="relative pt-24 pb-4 md:pt-28 md:pb-6 overflow-hidden">
+      <section className="relative pt-24 pb-4 md:pt-28 md:pb-6 overflow-hidden">
         <StarField starCount={700} />
         <div className="relative z-10 max-w-6xl mx-auto px-6">
           <div className="text-center mb-8">
@@ -129,7 +99,7 @@ export default function ISSPage() {
           </div>
 
           {/* 3D EVA Scene */}
-          <ISSViewer zoomLevel={zoomLevel} />
+          <ISSViewer />
           <p className="text-white/20 text-xs text-center mt-2">
             EVA spacewalk simulation. Drag to orbit, scroll to zoom. ISS model with animated astronaut.
           </p>
