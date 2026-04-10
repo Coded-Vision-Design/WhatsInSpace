@@ -225,6 +225,7 @@ export default function Header({ alwaysVisible = false }: HeaderProps) {
             </div>
           </div>
           <Link href="/iss" className="text-white/50 hover:text-white text-sm transition-colors hover-underline">ISS</Link>
+          <Link href="/news" className="text-white/50 hover:text-white text-sm transition-colors hover-underline">News</Link>
           <Link href="/#trajectory" onClick={(e) => handleHashClick(e, "/#trajectory")} className="text-white/50 hover:text-white text-sm transition-colors hover-underline">Flight Path</Link>
         </nav>
         <div className="flex items-center gap-3">
@@ -267,6 +268,7 @@ export default function Header({ alwaysVisible = false }: HeaderProps) {
             { href: "/technology", label: "Technology" },
             { href: "/solar-system", label: "Solar System" },
             { href: "/iss", label: "ISS" },
+            { href: "/news", label: "News" },
             { href: "/#trajectory", label: "Flight Path" },
             { href: "/#gallery", label: "Gallery" },
           ].map((item, idx) => (

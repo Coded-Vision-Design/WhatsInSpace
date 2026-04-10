@@ -1,0 +1,15 @@
+# Prevent directory listing
+Options -Indexes
+
+# Block access to .env files
+<FilesMatch "^\.env">
+    Require all denied
+</FilesMatch>
+
+# Set default charset
+AddDefaultCharset UTF-8
+
+# Restrict to specific HTTP methods
+<LimitExcept GET POST OPTIONS>
+    Require all denied
+</LimitExcept>

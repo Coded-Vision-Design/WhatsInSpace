@@ -107,7 +107,12 @@
     "airplanes",
     "doesn",
     "Whats",
-    "centered"
+    "centered",
+
+    "SNAPI",
+    "snapi",
+    "exoplanets",
+    "tabular"
   ],
   "ignorePaths": [
     "node_modules",
@@ -121,7 +126,8 @@
     "*.glb",
     "*.gltf",
     "*.json",
-    ".github"
+    ".github",
+    "api"
   ],
   "flagWords": [
     "favor",
