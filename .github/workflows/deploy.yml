@@ -4,12 +4,6 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
-    inputs:
-      skip_cache:
-        description: 'Skip build cache'
-        required: false
-        type: boolean
-        default: false
 
 concurrency:
   group: deploy-production
@@ -32,7 +26,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'pnpm'
 
       - name: Install dependencies
@@ -70,7 +64,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'pnpm'
 
       - name: Restore Next.js cache
@@ -107,7 +101,7 @@ jobs:
     name: Deploy to Hostinger
     needs: build
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
     environment:
       name: production
       url: https://whatsthatin.space
@@ -118,21 +112,47 @@ jobs:
           name: static-export
           path: out/
 
-      - name: Deploy via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          protocol: ftps
-          port: 21
-          local-dir: out/
-          server-dir: public_html/
-          dangerous-clean-slate: false
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${{ secrets.HOSTINGER_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          cat >> ~/.ssh/config << EOF
+          Host deployserver
+            HostName ${{ secrets.HOSTINGER_SSH_HOST }}
+            User ${{ secrets.HOSTINGER_SSH_USER }}
+            Port ${{ secrets.HOSTINGER_SSH_PORT }}
+            IdentityFile ~/.ssh/deploy_key
+            StrictHostKeyChecking no
+            ServerAliveInterval 60
+            ServerAliveCountMax 3
+          EOF
+
+      - name: Deploy via rsync
+        run: |
+          DEPLOY_PATH="/home/u372385223/domains/whatsthatin.space/public_html"
+          ssh deployserver "mkdir -p ${DEPLOY_PATH}"
+          rsync -avz --delete --checksum --exclude='.releases' out/ deployserver:${DEPLOY_PATH}/
+          echo "### Deployed Successfully" >> $GITHUB_STEP_SUMMARY
+          echo "| | |" >> $GITHUB_STEP_SUMMARY
+          echo "|--|--|" >> $GITHUB_STEP_SUMMARY
+          echo "| Commit | \`${{ github.sha }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Target | \`${DEPLOY_PATH}\` |" >> $GITHUB_STEP_SUMMARY
+
+      - name: Verify deployment
+        run: |
+          sleep 3
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -L --max-time 15 "https://whatsthatin.space" || echo "000")
+          if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "301" ] || [ "$HTTP_CODE" = "302" ]; then
+            echo "Health check passed: HTTP ${HTTP_CODE}"
+          else
+            echo "::warning::Health check returned HTTP ${HTTP_CODE} - site may still be propagating"
+          fi
+
+      - name: Cleanup SSH
+        if: always()
+        run: rm -rf ~/.ssh/deploy_key
 
   lighthouse:
     name: Lighthouse Audit
