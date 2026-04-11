@@ -38,6 +38,8 @@ export default function Header({ alwaysVisible = false }: HeaderProps) {
   const [crewOpen, setCrewOpen] = useState(false)
   const [solarOpen, setSolarOpen] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [mobileCrewOpen, setMobileCrewOpen] = useState(false)
+  const [mobileSolarOpen, setMobileSolarOpen] = useState(false)
   const crewTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const solarTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -245,7 +247,7 @@ export default function Header({ alwaysVisible = false }: HeaderProps) {
           )}
           {/* Mobile hamburger */}
           <button
-            onClick={() => setMobileOpen(!mobileOpen)}
+            onClick={() => { setMobileOpen(!mobileOpen); if (mobileOpen) { setMobileCrewOpen(false); setMobileSolarOpen(false) } }}
             className="md:hidden p-2 text-white/70 hover:text-white transition-colors"
             aria-label="Toggle menu"
           >
@@ -260,38 +262,143 @@ export default function Header({ alwaysVisible = false }: HeaderProps) {
       </div>
 
       {/* Mobile menu */}
-      <div className={`md:hidden transition-all duration-300 overflow-hidden ${mobileOpen ? "max-h-[80vh] opacity-100" : "max-h-0 opacity-0"}`}>
-        <div className="bg-black/95 backdrop-blur-xl border-t border-white/10 px-6 py-4 space-y-1">
-          {[
-            { href: "/", label: "Mission", section: "mission" },
-            { href: "/", label: "Crew", section: "crew" },
-            { href: "/technology", label: "Technology" },
-            { href: "/solar-system", label: "Solar System" },
-            { href: "/iss", label: "ISS" },
-            { href: "/news", label: "News" },
-            { href: "/", label: "Flight Path", section: "trajectory" },
-            { href: "/", label: "Gallery", section: "gallery" },
-          ].map((item, idx) => (
+      <div className={`md:hidden transition-all duration-300 overflow-hidden ${mobileOpen ? "max-h-[85vh] opacity-100" : "max-h-0 opacity-0"}`}>
+        <div className="bg-black/95 backdrop-blur-xl border-t border-white/10 overflow-y-auto max-h-[85vh]">
+          <nav className="px-6 py-5 space-y-1">
+            {/* Mission */}
             <Link
-              key={`${item.href}-${item.label}`}
-              href={item.href}
-              onClick={(e) => { setMobileOpen(false); if (item.section) handleHashClick(e, item.section) }}
-              className="block py-3 text-white/60 hover:text-white text-sm border-b border-white/5 transition-all"
-              style={{
-                opacity: mobileOpen ? 1 : 0,
-                transform: mobileOpen ? "translateX(0)" : "translateX(-12px)",
-                transition: `opacity 0.3s ${idx * 50}ms cubic-bezier(0.16,1,0.3,1), transform 0.3s ${idx * 50}ms cubic-bezier(0.16,1,0.3,1), color 0.15s`,
-              }}
+              href="/"
+              onClick={(e) => { setMobileOpen(false); handleHashClick(e, "mission") }}
+              className="block py-3.5 text-center text-white/70 hover:text-white text-[15px] font-medium border-b border-white/[0.06] transition-colors"
             >
-              {item.label}
+              Mission
             </Link>
-          ))}
-          <div className="pt-3 flex flex-col gap-2">
-            {CREW_MEMBERS.map((m) => (
-              <Link key={m.slug} href={`/crew/${m.slug}`} onClick={() => setMobileOpen(false)} className="text-white/40 hover:text-white text-xs transition-colors pl-3">
-                {m.name} - {m.role}
-              </Link>
-            ))}
+
+            {/* Crew accordion */}
+            <div className="border-b border-white/[0.06]">
+              <button
+                onClick={() => setMobileCrewOpen(!mobileCrewOpen)}
+                className="w-full flex items-center justify-center gap-2 py-3.5 text-white/70 hover:text-white text-[15px] font-medium transition-colors"
+              >
+                Crew
+                <svg
+                  className={`w-3.5 h-3.5 transition-transform duration-300 ${mobileCrewOpen ? "rotate-180" : ""}`}
+                  fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+                >
+                  <path d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div
+                className="overflow-hidden transition-all duration-300"
+                style={{ maxHeight: mobileCrewOpen ? "400px" : "0", opacity: mobileCrewOpen ? 1 : 0 }}
+              >
+                <div className="pb-3 space-y-0.5">
+                  {CREW_MEMBERS.map((member) => (
+                    <Link
+                      key={member.slug}
+                      href={`/crew/${member.slug}`}
+                      onClick={() => setMobileOpen(false)}
+                      className="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors mx-2"
+                    >
+                      <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 border border-white/10">
+                        <Image src={member.image} alt={member.name} width={36} height={36} className="w-full h-full object-cover object-top" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-white/80">{member.name}</p>
+                        <p className="text-[11px] text-white/30">{member.role}</p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Technology */}
+            <Link
+              href="/technology"
+              onClick={() => setMobileOpen(false)}
+              className="block py-3.5 text-center text-white/70 hover:text-white text-[15px] font-medium border-b border-white/[0.06] transition-colors"
+            >
+              Technology
+            </Link>
+
+            {/* Solar System accordion */}
+            <div className="border-b border-white/[0.06]">
+              <button
+                onClick={() => setMobileSolarOpen(!mobileSolarOpen)}
+                className="w-full flex items-center justify-center gap-2 py-3.5 text-white/70 hover:text-white text-[15px] font-medium transition-colors"
+              >
+                Solar System
+                <svg
+                  className={`w-3.5 h-3.5 transition-transform duration-300 ${mobileSolarOpen ? "rotate-180" : ""}`}
+                  fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+                >
+                  <path d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div
+                className="overflow-hidden transition-all duration-300"
+                style={{ maxHeight: mobileSolarOpen ? "600px" : "0", opacity: mobileSolarOpen ? 1 : 0 }}
+              >
+                <div className="pb-3 grid grid-cols-2 gap-1 px-2">
+                  {SOLAR_SYSTEM_BODIES.map((body) => (
+                    <Link
+                      key={body.slug}
+                      href={body.slug === "black-hole" ? "/solar-system/black-hole" : `/solar-system/${body.slug}`}
+                      onClick={() => setMobileOpen(false)}
+                      className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors"
+                    >
+                      <div
+                        className={`w-3 h-3 rounded-full shrink-0 ${(body as any).border ? "border border-purple-500/60" : ""}`}
+                        style={{ backgroundColor: body.color, boxShadow: `0 0 6px ${body.color}40` }}
+                      />
+                      <span className="text-sm text-white/70">{body.name}</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* ISS */}
+            <Link
+              href="/iss"
+              onClick={() => setMobileOpen(false)}
+              className="block py-3.5 text-center text-white/70 hover:text-white text-[15px] font-medium border-b border-white/[0.06] transition-colors"
+            >
+              ISS
+            </Link>
+
+            {/* News */}
+            <Link
+              href="/news"
+              onClick={() => setMobileOpen(false)}
+              className="block py-3.5 text-center text-white/70 hover:text-white text-[15px] font-medium border-b border-white/[0.06] transition-colors"
+            >
+              News
+            </Link>
+
+            {/* Flight Path */}
+            <Link
+              href="/"
+              onClick={(e) => { setMobileOpen(false); handleHashClick(e, "trajectory") }}
+              className="block py-3.5 text-center text-white/70 hover:text-white text-[15px] font-medium border-b border-white/[0.06] transition-colors"
+            >
+              Flight Path
+            </Link>
+
+            {/* Gallery */}
+            <Link
+              href="/"
+              onClick={(e) => { setMobileOpen(false); handleHashClick(e, "gallery") }}
+              className="block py-3.5 text-center text-white/70 hover:text-white text-[15px] font-medium transition-colors"
+            >
+              Gallery
+            </Link>
+          </nav>
+
+          {/* Footer branding */}
+          <div className="px-6 py-4 border-t border-white/[0.06] text-center">
+            <p className="text-[10px] text-white/20 uppercase tracking-[0.2em]">What&apos;s That In Space?</p>
           </div>
         </div>
       </div>
