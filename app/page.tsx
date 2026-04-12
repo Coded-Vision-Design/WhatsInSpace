@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { useState, useEffect, useRef, useCallback } from "react"
+import { useState, useEffect, useRef } from "react"
 import dynamic from "next/dynamic"
 import { crewData } from "@/lib/crew-data"
 import Header from "@/components/Header"
@@ -79,7 +79,6 @@ function InstagramIcon() {
 
 export default function Page() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const [gyroActive, setGyroActive] = useState(false)
   const gyroRequested = useRef(false)
   const [shouldAnimate, setShouldAnimate] = useState(false)
   const [animationComplete, setAnimationComplete] = useState(false)
@@ -109,27 +108,6 @@ export default function Page() {
     return () => observer.disconnect()
   }, [])
 
-  /**
-   * Request gyro permission silently on the user's first natural touch.
-   * iOS requires requestPermission to be called from a user gesture,
-   * so we hook into the first touchstart instead of showing a button.
-   */
-  const requestOrientationSilently = useCallback(async () => {
-    if (gyroRequested.current) return
-    gyroRequested.current = true
-    if (typeof (DeviceOrientationEvent as any).requestPermission === "function") {
-      try {
-        const state = await (DeviceOrientationEvent as any).requestPermission()
-        if (state === "granted") {
-          setGyroActive(true)
-          setShouldAnimate(true)
-        }
-      } catch {
-        // User denied the native browser prompt - parallax just uses mouse/scroll
-      }
-    }
-  }, [])
-
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       const x = (e.clientX - window.innerWidth / 2) / window.innerWidth
@@ -151,36 +129,56 @@ export default function Page() {
       })
     }
 
+    // iOS requires requestPermission to be called SYNCHRONOUSLY from a user
+    // gesture. Using .then() instead of async/await to preserve gesture context.
+    const requestIOSPermission = () => {
+      if (gyroRequested.current) return
+      gyroRequested.current = true
+      ;(DeviceOrientationEvent as any).requestPermission()
+        .then((state: string) => {
+          if (state === "granted") {
+            setShouldAnimate(true)
+            window.addEventListener("deviceorientation", handleOrientation)
+          }
+        })
+        .catch(() => {
+          // User denied the native prompt - fall back to no parallax
+        })
+    }
+
     const isTouchDevice =
       /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ||
       "ontouchstart" in window ||
       navigator.maxTouchPoints > 0
 
+    const needsIOSPermission =
+      typeof (DeviceOrientationEvent as any).requestPermission === "function"
+
+    // Always start the hero animation - gyro is only for parallax enhancement
+    setShouldAnimate(true)
+
     if (isTouchDevice) {
-      if (typeof (DeviceOrientationEvent as any).requestPermission === "function") {
-        // iOS: request on first natural touch instead of showing a button
-        window.addEventListener("touchstart", requestOrientationSilently, { once: true })
+      if (needsIOSPermission) {
+        // iOS: hook onto multiple user gesture types to be safe.
+        // Both handlers run synchronously so requestPermission keeps gesture context.
+        window.addEventListener("touchend", requestIOSPermission, { once: true, passive: true })
+        window.addEventListener("click", requestIOSPermission, { once: true })
       } else {
         // Android/other: gyro available without permission
-        setGyroActive(true)
-        setShouldAnimate(true)
+        window.addEventListener("deviceorientation", handleOrientation)
       }
     } else {
       window.addEventListener("mousemove", handleMouseMove)
-      setShouldAnimate(true)
-    }
-
-    if (gyroActive) {
-      window.addEventListener("deviceorientation", handleOrientation)
     }
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove)
-      window.removeEventListener("touchstart", requestOrientationSilently)
+      window.removeEventListener("touchend", requestIOSPermission)
+      window.removeEventListener("click", requestIOSPermission)
       window.removeEventListener("deviceorientation", handleOrientation)
       if (frameRef.current) cancelAnimationFrame(frameRef.current)
     }
-  }, [gyroActive, requestOrientationSilently])
+  }, [])
 
   // Lock scroll during hero animation, unlock when complete
   // Only play animation on first visit per session
@@ -195,14 +193,28 @@ export default function Page() {
     }
 
     // First visit: play full animation
-    document.body.style.overflow = "hidden"
+    // Lock scroll on both html and body for iOS Safari reliability.
+    // Also prevent touchmove scrolling which iOS allows even with overflow:hidden.
+    const preventTouchMove = (e: TouchEvent) => e.preventDefault()
+    const lockScroll = () => {
+      document.documentElement.style.overflow = "hidden"
+      document.body.style.overflow = "hidden"
+      document.body.style.touchAction = "none"
+      window.addEventListener("touchmove", preventTouchMove, { passive: false })
+    }
+    const unlockScroll = () => {
+      document.documentElement.style.overflow = ""
+      document.body.style.overflow = ""
+      document.body.style.touchAction = ""
+      window.removeEventListener("touchmove", preventTouchMove)
+    }
+
+    lockScroll()
     const animTimer = setTimeout(() => {
       setAnimationComplete(true)
       sessionStorage.setItem("heroAnimationSeen", "1")
     }, 8000)
-    const unlockTimer = setTimeout(() => {
-      document.body.style.overflow = ""
-    }, 8500)
+    const unlockTimer = setTimeout(unlockScroll, 8500)
 
     // Allow header nav clicks to skip the hero animation instantly
     const skipAnimation = () => {
@@ -211,7 +223,7 @@ export default function Page() {
       setAnimationComplete(true)
       setShouldAnimate(true)
       sessionStorage.setItem("heroAnimationSeen", "1")
-      document.body.style.overflow = ""
+      unlockScroll()
     }
     window.addEventListener("skip-hero-animation", skipAnimation)
 
@@ -219,7 +231,7 @@ export default function Page() {
       clearTimeout(animTimer)
       clearTimeout(unlockTimer)
       window.removeEventListener("skip-hero-animation", skipAnimation)
-      document.body.style.overflow = ""
+      unlockScroll()
     }
   }, [])
 
