@@ -83,7 +83,6 @@ export default function Page() {
   const [gyroActive, setGyroActive] = useState(false)
   const [shouldAnimate, setShouldAnimate] = useState(false)
   const [animationComplete, setAnimationComplete] = useState(false)
-  const hasSeenAnimation = useRef(false)
   // Header/footer are now shared components
   const frameRef = useRef<number>(0)
   const lastUpdateRef = useRef<number>(0)
@@ -180,59 +179,11 @@ export default function Page() {
     }
   }, [gyroActive])
 
-  // Lock scroll during hero animation, unlock when complete
-  // Only play animation on first visit per session
   useEffect(() => {
-    const seen = sessionStorage.getItem("heroAnimationSeen")
-    if (seen) {
-      // Skip animation entirely on repeat visits
-      hasSeenAnimation.current = true
+    const timer = setTimeout(() => {
       setAnimationComplete(true)
-      // Don't set shouldAnimate - elements render at default (final) position with no animation
-      return
-    }
-
-    // First visit: play full animation
-    // Lock scroll on both html and body for iOS Safari reliability.
-    // Also prevent touchmove scrolling which iOS allows even with overflow:hidden.
-    const preventTouchMove = (e: TouchEvent) => e.preventDefault()
-    const lockScroll = () => {
-      document.documentElement.style.overflow = "hidden"
-      document.body.style.overflow = "hidden"
-      document.body.style.touchAction = "none"
-      window.addEventListener("touchmove", preventTouchMove, { passive: false })
-    }
-    const unlockScroll = () => {
-      document.documentElement.style.overflow = ""
-      document.body.style.overflow = ""
-      document.body.style.touchAction = ""
-      window.removeEventListener("touchmove", preventTouchMove)
-    }
-
-    lockScroll()
-    const animTimer = setTimeout(() => {
-      setAnimationComplete(true)
-      sessionStorage.setItem("heroAnimationSeen", "1")
-    }, 8000)
-    const unlockTimer = setTimeout(unlockScroll, 8500)
-
-    // Allow header nav clicks to skip the hero animation instantly
-    const skipAnimation = () => {
-      clearTimeout(animTimer)
-      clearTimeout(unlockTimer)
-      setAnimationComplete(true)
-      setShouldAnimate(true)
-      sessionStorage.setItem("heroAnimationSeen", "1")
-      unlockScroll()
-    }
-    window.addEventListener("skip-hero-animation", skipAnimation)
-
-    return () => {
-      clearTimeout(animTimer)
-      clearTimeout(unlockTimer)
-      window.removeEventListener("skip-hero-animation", skipAnimation)
-      unlockScroll()
-    }
+    }, 4000)
+    return () => clearTimeout(timer)
   }, [])
 
   // Staggered reveal for crew cards
@@ -294,7 +245,7 @@ export default function Page() {
           style={{
             transform: `translate3d(${mousePosition.x * 50}px, ${mousePosition.y * 50}px, 0) scale(0.75)`,
             willChange: "transform",
-            width: "min(800px, 100vw)", height: "min(800px, 100vw)", left: "20px", top: "20px",
+            width: "800px", height: "800px", left: "20px", top: "20px",
           }}
         >
           <Image src="/images/ISS.webp" alt="International Space Station" fill className="object-contain" />
