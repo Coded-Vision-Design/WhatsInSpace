@@ -79,13 +79,33 @@ function InstagramIcon() {
 
 export default function Page() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const gyroRequested = useRef(false)
+  const [needsPermission, setNeedsPermission] = useState(false)
+  const [gyroActive, setGyroActive] = useState(false)
   const [shouldAnimate, setShouldAnimate] = useState(false)
   const [animationComplete, setAnimationComplete] = useState(false)
   const hasSeenAnimation = useRef(false)
   // Header/footer are now shared components
   const frameRef = useRef<number>(0)
   const lastUpdateRef = useRef<number>(0)
+
+  const requestOrientation = async () => {
+    if (typeof (DeviceOrientationEvent as any).requestPermission === "function") {
+      try {
+        const permissionState = await (DeviceOrientationEvent as any).requestPermission()
+        if (permissionState === "granted") {
+          setNeedsPermission(false)
+          setGyroActive(true)
+          setShouldAnimate(true)
+        }
+      } catch (error) {
+        console.error("Permission denied:", error)
+      }
+    } else {
+      setNeedsPermission(false)
+      setGyroActive(true)
+      setShouldAnimate(true)
+    }
+  }
 
   // Counter animation
   const statsView = useInView(0.3)
@@ -122,63 +142,43 @@ export default function Page() {
       if (frameRef.current) cancelAnimationFrame(frameRef.current)
       frameRef.current = requestAnimationFrame(() => {
         const isLandscape = window.innerWidth > window.innerHeight
-        const x = isLandscape
-          ? Math.max(-1, Math.min(1, (e.beta || 0) / 45))
-          : Math.max(-1, Math.min(1, (e.gamma || 0) / 45))
+        const raw = isLandscape ? (e.beta || 0) : (e.gamma || 0)
+        const x = Math.max(-1, Math.min(1, raw / 45))
         setMousePosition({ x, y: 0 })
       })
     }
 
-    // iOS requires requestPermission to be called SYNCHRONOUSLY from a user
-    // gesture. Using .then() instead of async/await to preserve gesture context.
-    const requestIOSPermission = () => {
-      if (gyroRequested.current) return
-      gyroRequested.current = true
-      ;(DeviceOrientationEvent as any).requestPermission()
-        .then((state: string) => {
-          if (state === "granted") {
-            setShouldAnimate(true)
-            window.addEventListener("deviceorientation", handleOrientation)
-          }
-        })
-        .catch(() => {
-          // User denied the native prompt - fall back to no parallax
-        })
-    }
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+    const isTablet = /iPad|Android/i.test(navigator.userAgent) && window.innerWidth >= 768
+    const isTouchDevice = isMobile || isTablet || "ontouchstart" in window || navigator.maxTouchPoints > 0
 
-    const isTouchDevice =
-      /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ||
-      "ontouchstart" in window ||
-      navigator.maxTouchPoints > 0
-
-    const needsIOSPermission =
-      typeof (DeviceOrientationEvent as any).requestPermission === "function"
-
-    // Always start the hero animation - gyro is only for parallax enhancement
-    setShouldAnimate(true)
+    // Always attach mousemove: hybrid devices (Win 11, Surface) report touch
+    // capability but use a real mouse. Whichever input fires drives parallax.
+    window.addEventListener("mousemove", handleMouseMove)
 
     if (isTouchDevice) {
-      if (needsIOSPermission) {
-        // iOS: hook onto multiple user gesture types to be safe.
-        // Both handlers run synchronously so requestPermission keeps gesture context.
-        window.addEventListener("touchend", requestIOSPermission, { once: true, passive: true })
-        window.addEventListener("click", requestIOSPermission, { once: true })
+      if (typeof (DeviceOrientationEvent as any).requestPermission === "function") {
+        // iOS: explicit user gesture required - show permission button
+        setNeedsPermission(true)
       } else {
         // Android/other: gyro available without permission
-        window.addEventListener("deviceorientation", handleOrientation)
+        setGyroActive(true)
+        setShouldAnimate(true)
       }
     } else {
-      window.addEventListener("mousemove", handleMouseMove)
+      setShouldAnimate(true)
+    }
+
+    if (gyroActive) {
+      window.addEventListener("deviceorientation", handleOrientation)
     }
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove)
-      window.removeEventListener("touchend", requestIOSPermission)
-      window.removeEventListener("click", requestIOSPermission)
       window.removeEventListener("deviceorientation", handleOrientation)
       if (frameRef.current) cancelAnimationFrame(frameRef.current)
     }
-  }, [])
+  }, [gyroActive])
 
   // Lock scroll during hero animation, unlock when complete
   // Only play animation on first visit per session
@@ -267,6 +267,17 @@ export default function Page() {
       <Header />
       {/* Hero Section */}
       <section className="relative h-dvh w-full overflow-hidden bg-black">
+        {needsPermission && (
+          <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/80">
+            <button
+              onClick={requestOrientation}
+              className="px-8 py-4 bg-orange-600 text-white text-xl font-bold rounded-lg hover:bg-orange-700 transition-colors"
+            >
+              Enable Parallax Effect
+            </button>
+          </div>
+        )}
+
         <div
           className={`absolute inset-0 ${shouldAnimate ? "zoom-layer-1" : ""}`}
           style={{
