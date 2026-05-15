@@ -634,12 +634,26 @@ export default function TrajectoryViewer() {
 
     // Gradient trail -brighter and more saturated than the faint trajectory line
     const TRAIL_LEN = 100
-    const trailGeo = new THREE.BufferGeometry()
+    // Pre-allocate position + colour buffers at full capacity so we can update
+    // in place each frame and use setDrawRange to control visible segment.
+    // (setFromPoints would warn every frame as the trail grows past the
+    // first-frame buffer size.)
+    const trailPositions = new Float32Array(TRAIL_LEN * 3)
     const trailColors = new Float32Array(TRAIL_LEN * 3)
+    const trailGeo = new THREE.BufferGeometry()
+    trailGeo.setAttribute("position", new THREE.BufferAttribute(trailPositions, 3))
+    trailGeo.setAttribute("color", new THREE.BufferAttribute(trailColors, 3))
+    trailGeo.setDrawRange(0, 0)
+
+    const trailGlowPositions = new Float32Array(TRAIL_LEN * 3)
+    const trailGlowGeo = new THREE.BufferGeometry()
+    trailGlowGeo.setAttribute("position", new THREE.BufferAttribute(trailGlowPositions, 3))
+    trailGlowGeo.setDrawRange(0, 0)
+
     const trailMat = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, linewidth: 2 })
     const trail = new THREE.Line(trailGeo, trailMat)
     // Second trail layer for glow effect
-    const trailGlow = new THREE.Line(trailGeo.clone(), new THREE.LineBasicMaterial({ color: 0xff6600, transparent: true, opacity: 0.3, linewidth: 1 }))
+    const trailGlow = new THREE.Line(trailGlowGeo, new THREE.LineBasicMaterial({ color: 0xff6600, transparent: true, opacity: 0.3, linewidth: 1 }))
     scene.add(trailGlow)
     scene.add(trail)
 
@@ -832,20 +846,29 @@ export default function TrajectoryViewer() {
       moon.position.copy(moonPos)
       moonLabel.position.set(moonPos.x, moonPos.y + M_VIS + 1.5, moonPos.z)
 
-      // Gradient trail
+      // Gradient trail -update pre-allocated buffers in place, then setDrawRange
       const tStart = Math.max(0, clampIdx - TRAIL_LEN + 1)
-      const tSlice = orionPts.slice(tStart, clampIdx + 1)
-      if (tSlice.length > 1) {
-        trailGeo.setFromPoints(tSlice)
-        trailGlow.geometry.setFromPoints(tSlice)
-        const numPts = tSlice.length
-        const colArr = new Float32Array(numPts * 3)
+      const numPts = Math.min(clampIdx + 1 - tStart, TRAIL_LEN)
+      if (numPts > 1) {
         for (let i = 0; i < numPts; i++) {
+          const p = orionPts[tStart + i]
+          const o = i * 3
+          trailPositions[o] = p.x; trailPositions[o + 1] = p.y; trailPositions[o + 2] = p.z
+          trailGlowPositions[o] = p.x; trailGlowPositions[o + 1] = p.y; trailGlowPositions[o + 2] = p.z
           const alpha = i / (numPts - 1)
           // Brighter, more saturated gradient: white-hot at head, orange at mid, dim at tail
-          colArr[i*3] = (0.4 + 0.6 * alpha); colArr[i*3+1] = (0.15 + 0.55 * alpha) * alpha; colArr[i*3+2] = 0.05 * alpha
+          trailColors[o] = 0.4 + 0.6 * alpha
+          trailColors[o + 1] = (0.15 + 0.55 * alpha) * alpha
+          trailColors[o + 2] = 0.05 * alpha
         }
-        trailGeo.setAttribute("color", new THREE.BufferAttribute(colArr, 3))
+        ;(trailGeo.attributes.position as THREE.BufferAttribute).needsUpdate = true
+        ;(trailGeo.attributes.color as THREE.BufferAttribute).needsUpdate = true
+        ;(trailGlowGeo.attributes.position as THREE.BufferAttribute).needsUpdate = true
+        trailGeo.setDrawRange(0, numPts)
+        trailGlowGeo.setDrawRange(0, numPts)
+      } else {
+        trailGeo.setDrawRange(0, 0)
+        trailGlowGeo.setDrawRange(0, 0)
       }
       trailGlow.visible = showTrailRef.current
 
