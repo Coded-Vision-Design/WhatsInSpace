@@ -136,14 +136,30 @@ export default function Page() {
 
     const handleOrientation = (e: DeviceOrientationEvent) => {
       const now = Date.now()
-      if (now - lastUpdateRef.current < 16) return
+      if (now - lastUpdateRef.current < 16) {
+        return
+      }
       lastUpdateRef.current = now
-      if (frameRef.current) cancelAnimationFrame(frameRef.current)
+
+      if (frameRef.current) {
+        cancelAnimationFrame(frameRef.current)
+      }
+
       frameRef.current = requestAnimationFrame(() => {
         const isLandscape = window.innerWidth > window.innerHeight
-        const raw = isLandscape ? (e.beta || 0) : (e.gamma || 0)
-        const x = Math.max(-1, Math.min(1, raw / 45))
-        setMousePosition({ x, y: 0 })
+
+        // eslint-disable-next-line no-useless-assignment
+        let x = 0
+        if (isLandscape) {
+          const beta = e.beta || 0
+          x = Math.max(-1, Math.min(1, beta / 45))
+        } else {
+          const gamma = e.gamma || 0
+          x = Math.max(-1, Math.min(1, gamma / 45))
+        }
+        const y = 0
+
+        setMousePosition({ x, y })
       })
     }
 
@@ -151,20 +167,15 @@ export default function Page() {
     const isTablet = /iPad|Android/i.test(navigator.userAgent) && window.innerWidth >= 768
     const isTouchDevice = isMobile || isTablet || "ontouchstart" in window || navigator.maxTouchPoints > 0
 
-    // Always attach mousemove: hybrid devices (Win 11, Surface) report touch
-    // capability but use a real mouse. Whichever input fires drives parallax.
-    window.addEventListener("mousemove", handleMouseMove)
-
     if (isTouchDevice) {
       if (typeof (DeviceOrientationEvent as any).requestPermission === "function") {
-        // iOS: explicit user gesture required - show permission button
         setNeedsPermission(true)
       } else {
-        // Android/other: gyro available without permission
         setGyroActive(true)
         setShouldAnimate(true)
       }
     } else {
+      window.addEventListener("mousemove", handleMouseMove)
       setShouldAnimate(true)
     }
 
@@ -175,7 +186,9 @@ export default function Page() {
     return () => {
       window.removeEventListener("mousemove", handleMouseMove)
       window.removeEventListener("deviceorientation", handleOrientation)
-      if (frameRef.current) cancelAnimationFrame(frameRef.current)
+      if (frameRef.current) {
+        cancelAnimationFrame(frameRef.current)
+      }
     }
   }, [gyroActive])
 
