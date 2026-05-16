@@ -1,0 +1,15 @@
+# Per-repo Dependabot config. Seeded by scripts/org-rollout.ps1 into any
+# universal-pipeline repo that doesn't already have its own.
+#
+# Ecosystems beyond github-actions are conditionally included by the
+# rollout script based on which manifest files exist in the repo.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      actions:
+        patterns: ["*"]
