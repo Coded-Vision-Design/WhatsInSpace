@@ -1,3 +1,8 @@
+<!-- BEGIN: cvd-org-header (auto-managed by scripts/inject-readme-header.ps1 in cdv-vps-ops; this block may be regenerated) -->
+
+Part of the [Coded Vision Design](https://github.com/Coded-Vision-Design) organisation. Org-wide standards: [community profile](https://github.com/Coded-Vision-Design/.github) | [security disclosure](https://github.com/Coded-Vision-Design/.github/blob/main/SECURITY.md)
+
+<!-- END: cvd-org-header -->
 # What's That In Space?
 
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
