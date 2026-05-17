@@ -1,8 +1,5 @@
-# Per-repo Dependabot config. Seeded by scripts/org-rollout.ps1 into any
-# universal-pipeline repo that doesn't already have its own.
-#
-# Ecosystems beyond github-actions are conditionally included by the
-# rollout script based on which manifest files exist in the repo.
+# Auto-seeded by cdv-vps-ops/scripts/seed-dependabot-config.ps1.
+# Tune freely - this file will not be overwritten on subsequent runs.
 version: 2
 updates:
   - package-ecosystem: "github-actions"
@@ -13,3 +10,16 @@ updates:
     groups:
       actions:
         patterns: ["*"]
+
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 25
+    groups:
+      transitive-security:
+        applies-to: security-updates
+        patterns: ["*"]
+      patch-and-minor:
+        applies-to: version-updates
+        update-types: ["patch", "minor"]
