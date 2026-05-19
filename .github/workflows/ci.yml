@@ -1,0 +1,80 @@
+# Per-repo caller for the org's universal CI/CD pipeline.
+# Source of truth for what + where + how: .cvd/project.yml
+# Everything else is in Coded-Vision-Design/.github reusables.
+
+name: CI/CD
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cicd-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  detect:
+    uses: Coded-Vision-Design/.github/.github/workflows/reusable-detect.yml@main
+
+  quality:
+    needs: detect
+    uses: Coded-Vision-Design/.github/.github/workflows/reusable-quality.yml@main
+    with:
+      project_type: ${{ needs.detect.outputs.project_type }}
+      pre_deploy_checks: ${{ needs.detect.outputs.pre_deploy_checks }}
+
+  security:
+    needs: detect
+    uses: Coded-Vision-Design/.github/.github/workflows/reusable-security.yml@main
+    with:
+      project_type: ${{ needs.detect.outputs.project_type }}
+
+  deploy-hostinger:
+    needs: [detect, quality, security]
+    if: >-
+      github.event_name == 'push' &&
+      needs.detect.outputs.deploy_enabled == 'true' &&
+      needs.detect.outputs.deploy_target == 'hostinger-shared'
+    uses: Coded-Vision-Design/.github/.github/workflows/reusable-deploy-hostinger.yml@main
+    with:
+      project_type:  ${{ needs.detect.outputs.project_type }}
+      remote_path:   ${{ needs.detect.outputs.remote_path }}
+      health_url:    ${{ needs.detect.outputs.health_url }}
+      domain:        ${{ needs.detect.outputs.domain }}
+      build_command: ${{ needs.detect.outputs.build_command }}
+      build_output:  ${{ needs.detect.outputs.build_output }}
+      keep_releases: ${{ needs.detect.outputs.keep_releases }}
+    secrets: inherit
+
+  deploy-cvd-vps:
+    needs: [detect, quality, security]
+    if: >-
+      github.event_name == 'push' &&
+      needs.detect.outputs.deploy_enabled == 'true' &&
+      needs.detect.outputs.deploy_target == 'cvd-vps-main'
+    uses: Coded-Vision-Design/.github/.github/workflows/reusable-deploy-vps-docker.yml@main
+    with:
+      environment:  cvd-vps-main
+      remote_path:  ${{ needs.detect.outputs.remote_path }}
+      compose_file: ${{ needs.detect.outputs.compose_file }}
+      health_url:   ${{ needs.detect.outputs.health_url }}
+    secrets: inherit
+
+  deploy-mysmart:
+    needs: [detect, quality, security]
+    if: >-
+      github.event_name == 'push' &&
+      needs.detect.outputs.deploy_enabled == 'true' &&
+      needs.detect.outputs.deploy_target == 'mysmart-vps'
+    uses: Coded-Vision-Design/.github/.github/workflows/reusable-deploy-vps-mysmart.yml@main
+    with:
+      remote_path:  ${{ needs.detect.outputs.remote_path }}
+      compose_file: ${{ needs.detect.outputs.compose_file }}
+      health_url:   ${{ needs.detect.outputs.health_url }}
+    secrets: inherit

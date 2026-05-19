@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Coded-Vision-Design/.github/main/schemas/cvd-project.schema.json
+project:
+  name: "WhatsInSpace"
+  type: auto
+
+deploy:
+  enabled: false
+  target: none
+
+quality:
+  pre_deploy_checks: []
