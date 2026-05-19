@@ -68,7 +68,7 @@ export default function WeightCalculator({ planetName, weightMultiplier, surface
             {displayWeight.toFixed(1)} <span className="text-lg" style={{ color }}>{unit}</span>
           </p>
           <p className="text-white/30 text-xs mt-1">
-            Surface gravity: {surfaceGravity} m/s2 ({weightMultiplier.toFixed(2)}x Earth)
+            Surface gravity: {surfaceGravity} m/s² ({weightMultiplier.toFixed(2)}x Earth)
           </p>
         </div>
       )}
