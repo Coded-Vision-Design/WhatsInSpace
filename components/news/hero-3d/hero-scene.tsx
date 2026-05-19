@@ -62,13 +62,15 @@ function SceneContent() {
   )
 }
 
+const LOADING_FADE_OUT_DELAY_MS = 800
+
 function LoadingOverlay() {
   const { progress } = useProgress()
   const [visible, setVisible] = useState(true)
 
   useEffect(() => {
     if (progress >= 100) {
-      const timer = setTimeout(() => setVisible(false), 800)
+      const timer = setTimeout(() => setVisible(false), LOADING_FADE_OUT_DELAY_MS)
       return () => clearTimeout(timer)
     }
   }, [progress])
