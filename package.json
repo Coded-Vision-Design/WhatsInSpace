@@ -40,5 +40,10 @@
     "tw-animate-css": "1.3.3",
     "typescript": "^6",
     "typescript-eslint": "^8.58.1"
+  },
+  "pnpm": {
+    "overrides": {
+      "postcss@<8.5.10": ">=8.5.10"
+    }
   }
 }
