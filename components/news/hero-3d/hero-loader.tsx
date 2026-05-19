@@ -59,7 +59,7 @@ function StaticFallback() {
           <a href="#news-feed" className="inline-flex items-center gap-2 rounded-lg bg-orange-500 px-8 py-3 text-base font-semibold text-gray-900 hover:bg-orange-400 transition-colors shadow-lg shadow-orange-500/25">
             Read Latest News
           </a>
-          <a href="/solar-system" className="inline-flex items-center gap-2 rounded-lg border border-gray-600 px-8 py-3 text-base font-semibold text-gray-200 hover:bg-gray-800/60 transition-colors">
+          <a href="/solar-system/" className="inline-flex items-center gap-2 rounded-lg border border-gray-600 px-8 py-3 text-base font-semibold text-gray-200 hover:bg-gray-800/60 transition-colors">
             Explore Solar System
           </a>
         </div>

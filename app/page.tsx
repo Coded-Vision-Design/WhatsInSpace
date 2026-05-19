@@ -14,6 +14,7 @@ const TrajectoryViewer = dynamic(() => import("@/components/TrajectoryViewer"), 
 const Particles = dynamic(() => import("@/components/Particles"), { ssr: false })
 const VoyagerScroll = dynamic(() => import("@/components/VoyagerScroll"), { ssr: false })
 import ImageGallery from "@/components/ImageGallery"
+import LazyMount from "@/components/LazyMount"
 
 const MISSION_START = new Date("2026-04-01T00:00:00Z")
 const MISSION_END = new Date("2026-04-12T00:00:00Z")
@@ -684,7 +685,7 @@ export default function Page() {
                   </div>
 
                   <Link
-                    href={`/crew/${member.slug}`}
+                    href={`/crew/${member.slug}/`}
                     className="mt-2 flex items-center justify-center gap-2 px-4 py-2.5 bg-orange-600/10 border border-orange-500/20 rounded-lg text-orange-400 text-sm font-medium hover:bg-orange-600/20 hover:border-orange-500/40 transition-all opacity-0 group-hover:opacity-100"
                   >
                     View Profile
@@ -711,7 +712,9 @@ export default function Page() {
             </p>
           </div>
           <div className="fade-section">
-            <TrajectoryViewer />
+            <LazyMount style={{ minHeight: "600px" }}>
+              <TrajectoryViewer />
+            </LazyMount>
           </div>
         </div>
       </section>
@@ -765,7 +768,7 @@ export default function Page() {
 
       {/* CTA */}
       <section id="cta" className="relative z-30 bg-black border-t border-white/10 overflow-hidden">
-        <div className="absolute inset-0">
+        <LazyMount className="absolute inset-0">
           <Particles
             particleColors={["#ffffff", "#f0f0ff", "#e8e8f0", "#fff8f0", "#f5f5ff"]}
             particleCount={200}
@@ -777,7 +780,7 @@ export default function Page() {
             disableRotation={false}
             pixelRatio={1}
           />
-        </div>
+        </LazyMount>
         <div className="relative z-10 max-w-4xl mx-auto px-6 py-32 text-center">
           <div className="fade-section">
             <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">Join the Journey</h2>
@@ -786,7 +789,7 @@ export default function Page() {
               Artemis program and be part of something greater than ourselves.
             </p>
             <div ref={ctaMagnetic.ref} style={ctaMagnetic.style} className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="/solar-system" className="group press-spring shimmer-card border-glow-hover flex items-center gap-3 px-6 py-4 bg-white/[0.04] border border-white/10 rounded-xl hover:bg-white/[0.08] hover:border-white/20 transition-all">
+              <a href="/solar-system/" className="group press-spring shimmer-card border-glow-hover flex items-center gap-3 px-6 py-4 bg-white/[0.04] border border-white/10 rounded-xl hover:bg-white/[0.08] hover:border-white/20 transition-all">
                 <span className="text-xl">🪐</span>
                 <div className="text-left">
                   <p className="text-white font-semibold text-sm">Explore the Solar System</p>
@@ -800,7 +803,7 @@ export default function Page() {
                   <p className="text-white/40 text-xs">The astronauts flying to the Moon</p>
                 </div>
               </a>
-              <a href="/technology" className="group press-spring shimmer-card border-glow-hover flex items-center gap-3 px-6 py-4 bg-white/[0.04] border border-white/10 rounded-xl hover:bg-white/[0.08] hover:border-white/20 transition-all">
+              <a href="/technology/" className="group press-spring shimmer-card border-glow-hover flex items-center gap-3 px-6 py-4 bg-white/[0.04] border border-white/10 rounded-xl hover:bg-white/[0.08] hover:border-white/20 transition-all">
                 <span className="text-xl">🚀</span>
                 <div className="text-left">
                   <p className="text-white font-semibold text-sm">The Technology</p>

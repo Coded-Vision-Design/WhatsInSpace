@@ -5,7 +5,7 @@ import Header from "@/components/Header"
 import Footer from "@/components/Footer"
 import dynamic from "next/dynamic"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faSatellite, faClock, faUsers, faFlask, faEye, faHistory, faUtensils, faDumbbell, faBed, faMicroscope } from "@fortawesome/free-solid-svg-icons"
+import { faSatellite, faUsers, faFlask, faEye, faHistory, faUtensils, faDumbbell, faBed, faMicroscope } from "@fortawesome/free-solid-svg-icons"
 
 const ISSViewer = dynamic(() => import("@/components/ISSViewer"), { ssr: false })
 const StarField = dynamic(() => import("@/components/StarField"), { ssr: false })

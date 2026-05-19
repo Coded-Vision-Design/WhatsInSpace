@@ -25,7 +25,7 @@ export default function PlanetPageClient({ body }: { body: CelestialBody }) {
       <section className="relative pt-24 pb-8 md:pt-32 md:pb-12 overflow-hidden">
         <StarField starCount={600} />
         <div className="relative z-10 max-w-6xl mx-auto px-6">
-          <Link href="/solar-system" className="inline-flex items-center gap-2 text-white/40 hover:text-white text-sm transition-colors mb-8">
+          <Link href="/solar-system/" className="inline-flex items-center gap-2 text-white/40 hover:text-white text-sm transition-colors mb-8">
             <FontAwesomeIcon icon={faArrowLeft} className="w-3 h-3" />
             Back to solar system
           </Link>
@@ -192,12 +192,12 @@ export default function PlanetPageClient({ body }: { body: CelestialBody }) {
           <h2 className="text-2xl font-bold text-white mb-6">Explore More</h2>
           <div className="flex gap-3 overflow-x-auto pb-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {solarSystemData.filter(b => b.slug !== body.slug).map((b) => (
-              <Link key={b.slug} href={`/solar-system/${b.slug}`} className="shrink-0 flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-lg hover:border-white/20 transition-all">
+              <Link key={b.slug} href={`/solar-system/${b.slug}/`} className="shrink-0 flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-lg hover:border-white/20 transition-all">
                 <div className="w-3 h-3 rounded-full" style={{ backgroundColor: b.color }} />
                 <span className="text-white/60 text-sm whitespace-nowrap">{b.name}</span>
               </Link>
             ))}
-            <Link href="/solar-system/black-hole" className="shrink-0 flex items-center gap-2 px-4 py-2 bg-white/5 border border-purple-500/20 rounded-lg hover:border-purple-500/40 transition-all">
+            <Link href="/solar-system/black-hole/" className="shrink-0 flex items-center gap-2 px-4 py-2 bg-white/5 border border-purple-500/20 rounded-lg hover:border-purple-500/40 transition-all">
               <div className="w-3 h-3 rounded-full bg-black border border-purple-500/50" />
               <span className="text-purple-400 text-sm whitespace-nowrap">Black Hole</span>
             </Link>

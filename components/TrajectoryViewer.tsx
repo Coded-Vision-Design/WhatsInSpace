@@ -101,49 +101,6 @@ void main() {
   gl_FragColor = vec4(mix(litNight, litDay, dayMix), 1.0);
 }`
 
-const ATMOS_VERT = /* glsl */ `
-varying vec3 vNormal; varying vec3 vPosition; varying vec3 vWorldNormal; varying vec3 vWorldPosition;
-void main() {
-  vNormal = normalize(normalMatrix * normal);
-  vWorldNormal = normalize(mat3(modelMatrix) * normal);
-  vPosition = (modelViewMatrix * vec4(position, 1.0)).xyz;
-  vWorldPosition = (modelMatrix * vec4(position, 1.0)).xyz;
-  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-}`
-
-const ATMOS_FRAG = /* glsl */ `
-uniform vec3 sunDirection;
-varying vec3 vNormal; varying vec3 vPosition; varying vec3 vWorldNormal; varying vec3 vWorldPosition;
-void main() {
-  vec3 viewDir = normalize(-vPosition);
-  vec3 worldViewDir = normalize(cameraPosition - vWorldPosition);
-  float rim = 1.0 - max(0.0, dot(normalize(vNormal), viewDir));
-  float fresnel = pow(rim, 3.0);
-
-  float sunFacing = max(0.0, dot(normalize(vWorldNormal), sunDirection));
-  float sunAngle = dot(normalize(vWorldNormal), sunDirection);
-
-  // Rayleigh scattering: blue at limb, orange/red at terminator
-  vec3 rayleighBlue = vec3(0.15, 0.35, 0.95);
-  vec3 rayleighWhite = vec3(0.45, 0.65, 1.0);
-  vec3 sunsetOrange = vec3(1.0, 0.4, 0.1);
-  vec3 sunsetRed = vec3(0.9, 0.15, 0.05);
-
-  // Base Rayleigh color varies with rim
-  vec3 color = mix(rayleighBlue, rayleighWhite, rim);
-
-  // Terminator band: where sun angle is near zero (sunset/sunrise line)
-  float terminator = 1.0 - smoothstep(0.0, 0.25, abs(sunAngle));
-  vec3 terminatorColor = mix(sunsetOrange, sunsetRed, rim * 0.5);
-  color = mix(color, terminatorColor, terminator * 0.7);
-
-  // Brighten the sunlit limb
-  color = mix(color, vec3(0.7, 0.85, 1.0), sunFacing * rim * 0.4);
-
-  float intensity = 0.7 + 0.8 * sunFacing + 0.3 * terminator;
-  gl_FragColor = vec4(color, fresnel * intensity);
-}`
-
 // ── Star Shaders (GPU-driven twinkle) ──────────────────────────────
 const STAR_VERT = /* glsl */ `
 attribute float size;
@@ -464,8 +421,6 @@ export default function TrajectoryViewer() {
       moonTexture: { value: procMoon as THREE.Texture },
       sunDirection: { value: SUN_DIR.clone() },
     }
-    let cloudTexLoaded: THREE.Texture | null = null
-
     const tryLoad = (path: string, cs: THREE.ColorSpace, cb: (t: THREE.Texture) => void) => {
       loader.load(path, (t) => { t.colorSpace = cs; cb(t) }, undefined, () => {})
     }
@@ -474,7 +429,6 @@ export default function TrajectoryViewer() {
     tryLoad("/textures/earth_specular_2k.jpg", THREE.LinearSRGBColorSpace, t => { earthUniforms.specularMap.value = t })
     tryLoad("/textures/earth_normal_2k.jpg", THREE.LinearSRGBColorSpace, t => { earthUniforms.normalMap.value = t })
     tryLoad("/textures/earth_clouds_2k.jpg", THREE.SRGBColorSpace, t => {
-      cloudTexLoaded = t
       if (earthUniforms.cloudTexture) earthUniforms.cloudTexture.value = t
     })
     tryLoad("/textures/moon_2k.jpg", THREE.SRGBColorSpace, t => { moonUniforms.moonTexture.value = t })

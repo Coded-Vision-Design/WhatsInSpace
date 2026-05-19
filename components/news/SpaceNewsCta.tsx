@@ -29,7 +29,7 @@ export function SpaceNewsCta() {
                 Back to Top
               </button>
               <Link
-                href="/solar-system"
+                href="/solar-system/"
                 className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-8 py-3 text-base font-semibold text-gray-200 hover:bg-white/10 transition-colors min-w-[200px] justify-center"
               >
                 Explore Solar System

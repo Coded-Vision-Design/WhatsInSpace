@@ -54,19 +54,6 @@ void main() {
   gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 }`
 
-const ATMOS_FRAG = `
-uniform vec3 sunDirection;
-varying vec3 vNormal; varying vec3 vPosition; varying vec3 vWorldNormal;
-void main() {
-  vec3 viewDir = normalize(-vPosition);
-  float rim = 1.0 - max(0.0, dot(normalize(vNormal), viewDir));
-  float fresnel = pow(rim, 3.0);
-  float sunFacing = max(0.0, dot(normalize(vWorldNormal), sunDirection));
-  vec3 color = mix(vec3(0.15, 0.35, 0.9), vec3(0.4, 0.7, 1.0), rim);
-  color = mix(color, vec3(0.6, 0.85, 1.0), sunFacing * 0.3);
-  gl_FragColor = vec4(color, fresnel * (0.8 + 0.5 * sunFacing));
-}`
-
 export default function PlanetViewer({
   slug,
   color,

@@ -11,8 +11,8 @@ export default function Footer() {
           <div className="flex gap-8">
             <Link href="/" className="text-white/40 hover:text-white/70 transition-colors text-sm">Mission</Link>
             <Link href="/" className="text-white/40 hover:text-white/70 transition-colors text-sm">Crew</Link>
-            <Link href="/technology" className="text-white/40 hover:text-white/70 transition-colors text-sm">Technology</Link>
-            <Link href="/news" className="text-white/40 hover:text-white/70 transition-colors text-sm">News</Link>
+            <Link href="/technology/" className="text-white/40 hover:text-white/70 transition-colors text-sm">Technology</Link>
+            <Link href="/news/" className="text-white/40 hover:text-white/70 transition-colors text-sm">News</Link>
             <Link href="/" className="text-white/40 hover:text-white/70 transition-colors text-sm">Gallery</Link>
           </div>
           <p className="text-white/20 text-sm">2026 Artemis Program</p>

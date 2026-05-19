@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 import Header from "@/components/Header"
 import Footer from "@/components/Footer"
 import { solarSystemData } from "@/lib/planet-data"
@@ -26,7 +26,6 @@ const ORBIT_RADII = [0, 45, 65, 85, 110, 155, 195, 235, 270, 305]
 const ORBIT_SPEEDS = [0, 4.15, 1.63, 1, 0.53, 0.084, 0.034, 0.012, 0.006, 0.004]
 
 export default function SolarSystemPage() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
   const [hovered, setHovered] = useState<string | null>(null)
   const [time, setTime] = useState(0)
 
@@ -80,7 +79,7 @@ export default function SolarSystemPage() {
 
             {/* Sun at center */}
             <Link
-              href="/solar-system/sun"
+              href="/solar-system/sun/"
               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 group"
               onMouseEnter={() => setHovered("sun")}
               onMouseLeave={() => setHovered(null)}
@@ -105,7 +104,7 @@ export default function SolarSystemPage() {
               return (
                 <Link
                   key={body.slug}
-                  href={`/solar-system/${body.slug}`}
+                  href={`/solar-system/${body.slug}/`}
                   className="absolute z-10 group"
                   style={{
                     top: `calc(50% + ${y}px)`,
@@ -156,7 +155,7 @@ export default function SolarSystemPage() {
             {allBodies.map((body) => (
               <Link
                 key={body.slug}
-                href={`/solar-system/${body.slug}`}
+                href={`/solar-system/${body.slug}/`}
                 className="group shimmer-card border-glow-hover bg-white/[0.03] border border-white/[0.08] rounded-xl p-5 hover:border-white/20 hover:-translate-y-1 transition-all text-center flex flex-col items-center"
               >
                 <div
@@ -181,7 +180,7 @@ export default function SolarSystemPage() {
             ))}
             {/* Black hole card */}
             <Link
-              href="/solar-system/black-hole"
+              href="/solar-system/black-hole/"
               className="group shimmer-card bg-white/[0.03] border border-white/[0.08] rounded-xl p-5 hover:border-purple-500/30 hover:-translate-y-1 transition-all text-center flex flex-col items-center"
             >
               <div className="w-12 h-12 rounded-full mb-3 bg-black border-2 border-purple-500/50 shadow-[0_0_15px_rgba(139,92,246,0.3)] mx-auto" />

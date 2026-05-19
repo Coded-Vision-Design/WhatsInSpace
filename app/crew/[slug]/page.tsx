@@ -179,7 +179,7 @@ export default async function CrewPage({ params }: { params: Promise<{ slug: str
           <h2 className="text-3xl font-bold text-white mb-8">Meet the rest of the crew</h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {otherCrew.map((c) => (
-              <Link key={c.slug} href={`/crew/${c.slug}`} className="group">
+              <Link key={c.slug} href={`/crew/${c.slug}/`} className="group">
                 <div className="relative aspect-[3/4] rounded-xl overflow-hidden mb-3">
                   <Image src={c.image} alt={c.name} fill className="object-cover object-top transition-transform duration-500 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />

@@ -151,7 +151,7 @@ function HeroTextOverlay() {
               </svg>
               Read Latest News
             </a>
-            <a href="/solar-system" className="inline-flex items-center gap-2 rounded-lg border border-gray-600 bg-gray-900/50 backdrop-blur-sm px-7 py-3 text-sm font-semibold text-gray-200 hover:bg-gray-800/60 transition-colors">
+            <a href="/solar-system/" className="inline-flex items-center gap-2 rounded-lg border border-gray-600 bg-gray-900/50 backdrop-blur-sm px-7 py-3 text-sm font-semibold text-gray-200 hover:bg-gray-800/60 transition-colors">
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
               </svg>

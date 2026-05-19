@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faArrowLeft, faInfinity, faRadiation, faClock, faCompress } from "@fortawesome/free-solid-svg-icons"
 
 const BlackHoleViewer = dynamic(() => import("@/components/BlackHoleViewer"), { ssr: false })
-const StarField = dynamic(() => import("@/components/StarField"), { ssr: false })
 
 const FACTS = [
   { icon: faInfinity, title: "Singularity", description: "At the center lies a singularity, a point of infinite density where the known laws of physics break down. All matter that crosses the event horizon is inevitably drawn toward it." },
@@ -42,7 +41,7 @@ export default function BlackHolePage() {
 
         {/* Text overlay */}
         <div className="relative z-10 max-w-6xl mx-auto px-6 pt-24 md:pt-32">
-          <Link href="/solar-system" className="inline-flex items-center gap-2 text-white/60 hover:text-white text-sm transition-colors mb-8 backdrop-blur-sm bg-black/20 px-3 py-1.5 rounded-lg">
+          <Link href="/solar-system/" className="inline-flex items-center gap-2 text-white/60 hover:text-white text-sm transition-colors mb-8 backdrop-blur-sm bg-black/20 px-3 py-1.5 rounded-lg">
             <FontAwesomeIcon icon={faArrowLeft} className="w-3 h-3" />
             Back to solar system
           </Link>

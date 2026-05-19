@@ -136,7 +136,7 @@ export default function Header({ alwaysVisible = false }: HeaderProps) {
                 {CREW_MEMBERS.map((member, idx) => (
                   <Link
                     key={member.slug}
-                    href={`/crew/${member.slug}`}
+                    href={`/crew/${member.slug}/`}
                     className="flex items-center gap-3 px-4 py-3 hover:bg-white/[0.06] transition-all group"
                     style={{
                       opacity: crewOpen ? 1 : 0,
@@ -167,7 +167,7 @@ export default function Header({ alwaysVisible = false }: HeaderProps) {
             </div>
           </div>
 
-          <Link href="/technology" className="text-white/50 hover:text-white text-sm transition-colors hover-underline">Technology</Link>
+          <Link href="/technology/" className="text-white/50 hover:text-white text-sm transition-colors hover-underline">Technology</Link>
           {/* Solar System with dropdown */}
           <div
             className="relative"
@@ -175,7 +175,7 @@ export default function Header({ alwaysVisible = false }: HeaderProps) {
             onMouseLeave={closeSolar}
           >
             <Link
-              href="/solar-system"
+              href="/solar-system/"
               className="text-white/50 hover:text-white text-sm transition-colors flex items-center gap-1"
             >
               Solar System
@@ -199,7 +199,7 @@ export default function Header({ alwaysVisible = false }: HeaderProps) {
                 {SOLAR_SYSTEM_BODIES.map((body, idx) => (
                   <Link
                     key={body.slug}
-                    href={body.slug === "black-hole" ? "/solar-system/black-hole" : `/solar-system/${body.slug}`}
+                    href={body.slug === "black-hole" ? "/solar-system/black-hole/" : `/solar-system/${body.slug}/`}
                     className="flex items-center gap-3 px-4 py-2.5 hover:bg-white/[0.06] transition-all group"
                     style={{
                       opacity: solarOpen ? 1 : 0,
@@ -215,7 +215,7 @@ export default function Header({ alwaysVisible = false }: HeaderProps) {
                   </Link>
                 ))}
                 <Link
-                  href="/solar-system"
+                  href="/solar-system/"
                   className="flex items-center justify-center gap-1.5 px-4 py-2.5 border-t border-white/[0.06] text-xs text-white/40 hover:text-white/70 hover:bg-white/[0.04] transition-colors"
                 >
                   View solar system
@@ -226,8 +226,8 @@ export default function Header({ alwaysVisible = false }: HeaderProps) {
               </div>
             </div>
           </div>
-          <Link href="/iss" className="text-white/50 hover:text-white text-sm transition-colors hover-underline">ISS</Link>
-          <Link href="/news" className="text-white/50 hover:text-white text-sm transition-colors hover-underline">News</Link>
+          <Link href="/iss/" className="text-white/50 hover:text-white text-sm transition-colors hover-underline">ISS</Link>
+          <Link href="/news/" className="text-white/50 hover:text-white text-sm transition-colors hover-underline">News</Link>
           <Link href="/" onClick={(e) => handleHashClick(e, "trajectory")} className="text-white/50 hover:text-white text-sm transition-colors hover-underline">Flight Path</Link>
         </nav>
         <div className="flex items-center gap-3">
@@ -296,7 +296,7 @@ export default function Header({ alwaysVisible = false }: HeaderProps) {
                   {CREW_MEMBERS.map((member) => (
                     <Link
                       key={member.slug}
-                      href={`/crew/${member.slug}`}
+                      href={`/crew/${member.slug}/`}
                       onClick={() => setMobileOpen(false)}
                       className="flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors mx-2"
                     >
@@ -315,7 +315,7 @@ export default function Header({ alwaysVisible = false }: HeaderProps) {
 
             {/* Technology */}
             <Link
-              href="/technology"
+              href="/technology/"
               onClick={() => setMobileOpen(false)}
               className="block py-3.5 text-center text-white/70 hover:text-white text-[15px] font-medium border-b border-white/[0.06] transition-colors"
             >
@@ -344,7 +344,7 @@ export default function Header({ alwaysVisible = false }: HeaderProps) {
                   {SOLAR_SYSTEM_BODIES.map((body) => (
                     <Link
                       key={body.slug}
-                      href={body.slug === "black-hole" ? "/solar-system/black-hole" : `/solar-system/${body.slug}`}
+                      href={body.slug === "black-hole" ? "/solar-system/black-hole/" : `/solar-system/${body.slug}/`}
                       onClick={() => setMobileOpen(false)}
                       className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg hover:bg-white/[0.06] transition-colors"
                     >
@@ -361,7 +361,7 @@ export default function Header({ alwaysVisible = false }: HeaderProps) {
 
             {/* ISS */}
             <Link
-              href="/iss"
+              href="/iss/"
               onClick={() => setMobileOpen(false)}
               className="block py-3.5 text-center text-white/70 hover:text-white text-[15px] font-medium border-b border-white/[0.06] transition-colors"
             >
@@ -370,7 +370,7 @@ export default function Header({ alwaysVisible = false }: HeaderProps) {
 
             {/* News */}
             <Link
-              href="/news"
+              href="/news/"
               onClick={() => setMobileOpen(false)}
               className="block py-3.5 text-center text-white/70 hover:text-white text-[15px] font-medium border-b border-white/[0.06] transition-colors"
             >

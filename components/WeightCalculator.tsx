@@ -13,7 +13,6 @@ export default function WeightCalculator({ planetName, weightMultiplier, surface
   const [weight, setWeight] = useState("")
   const [unit, setUnit] = useState<"kg" | "lbs">("kg")
   const [age, setAge] = useState("")
-  const [ageFactor, setAgeFactor] = useState(1)
 
   const numWeight = parseFloat(weight) || 0
   const numAge = parseFloat(age) || 0
