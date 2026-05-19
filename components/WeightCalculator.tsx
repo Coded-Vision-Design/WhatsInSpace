@@ -90,10 +90,9 @@ export default function WeightCalculator({ planetName, weightMultiplier, surface
         <div className="p-4 rounded-xl" style={{ backgroundColor: `${color}15`, borderColor: `${color}30`, borderWidth: 1, borderStyle: "solid" }}>
           <p className="text-white/40 text-xs uppercase tracking-wider mb-1">Your age on {planetName}</p>
           <p className="text-3xl font-bold text-white font-mono">
-            {(numAge * (weightMultiplier !== 0 ? 1 / weightMultiplier : 0) * 9.81 / surfaceGravity * weightMultiplier).toFixed(1) !== "NaN"
-              ? planetName === "The Sun" ? "N/A" : `${(numAge * (365.25 / (getYearDays(planetName)))).toFixed(2)}`
-              : "N/A"
-            }
+            {planetName === "The Sun"
+              ? "N/A"
+              : (numAge * (365.25 / getYearDays(planetName))).toFixed(2)}
             <span className="text-lg ml-1" style={{ color }}>{planetName} years</span>
           </p>
         </div>
