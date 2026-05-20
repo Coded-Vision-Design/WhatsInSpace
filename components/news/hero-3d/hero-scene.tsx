@@ -63,13 +63,14 @@ function SceneContent() {
 }
 
 const LOADING_FADE_OUT_DELAY_MS = 800
+const LOADING_COMPLETE_PERCENT = 100
 
 function LoadingOverlay() {
   const { progress } = useProgress()
   const [visible, setVisible] = useState(true)
 
   useEffect(() => {
-    if (progress >= 100) {
+    if (progress >= LOADING_COMPLETE_PERCENT) {
       const timer = setTimeout(() => setVisible(false), LOADING_FADE_OUT_DELAY_MS)
       return () => clearTimeout(timer)
     }
@@ -80,7 +81,7 @@ function LoadingOverlay() {
   return (
     <div
       className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-black transition-opacity duration-700"
-      style={{ opacity: progress >= 100 ? 0 : 1 }}
+      style={{ opacity: progress >= LOADING_COMPLETE_PERCENT ? 0 : 1 }}
     >
       <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-orange-500/10 mb-4">
         <svg className="h-6 w-6 text-orange-400 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -95,6 +96,9 @@ function LoadingOverlay() {
   )
 }
 
+const HERO_TEXT_FADE_DISTANCE = 0.15
+const POINTER_EVENTS_OPACITY_THRESHOLD = 0.01
+
 /**
  * Hero text overlay that fades out as the user scrolls.
  */
@@ -108,9 +112,9 @@ function HeroTextOverlay() {
       if (overlayRef.current) {
         const root = overlayRef.current.closest("[data-news-hero-root]") as HTMLElement | null
         const p = parseFloat(root?.dataset.scrollProgress || "0")
-        const opacity = Math.max(0, 1 - p / 0.15)
+        const opacity = Math.max(0, 1 - p / HERO_TEXT_FADE_DISTANCE)
         overlayRef.current.style.opacity = String(opacity)
-        overlayRef.current.style.pointerEvents = opacity < 0.01 ? "none" : ""
+        overlayRef.current.style.pointerEvents = opacity < POINTER_EVENTS_OPACITY_THRESHOLD ? "none" : ""
       }
       raf = requestAnimationFrame(tick)
     }
@@ -166,6 +170,8 @@ function HeroTextOverlay() {
   )
 }
 
+const SCROLL_INDICATOR_FADE_DISTANCE = 0.05
+
 function ScrollIndicator() {
   const ref = useRef<HTMLDivElement>(null)
 
@@ -175,7 +181,7 @@ function ScrollIndicator() {
       if (ref.current) {
         const root = ref.current.closest("[data-news-hero-root]") as HTMLElement | null
         const p = parseFloat(root?.dataset.scrollProgress || "0")
-        ref.current.style.opacity = String(Math.max(0, 1 - p / 0.05))
+        ref.current.style.opacity = String(Math.max(0, 1 - p / SCROLL_INDICATOR_FADE_DISTANCE))
       }
       raf = requestAnimationFrame(tick)
     }

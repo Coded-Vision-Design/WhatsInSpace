@@ -2,6 +2,10 @@
 
 import { useState } from "react"
 
+const LBS_TO_KG = 0.453592
+const KG_TO_LBS = 2.20462
+const EARTH_DAYS_PER_YEAR = 365.25
+
 interface WeightCalculatorProps {
   planetName: string
   weightMultiplier: number
@@ -17,9 +21,9 @@ export default function WeightCalculator({ planetName, weightMultiplier, surface
   const numWeight = parseFloat(weight) || 0
   const numAge = parseFloat(age) || 0
 
-  const weightInKg = unit === "lbs" ? numWeight * 0.453592 : numWeight
+  const weightInKg = unit === "lbs" ? numWeight * LBS_TO_KG : numWeight
   const planetWeight = weightInKg * weightMultiplier
-  const displayWeight = unit === "lbs" ? planetWeight * 2.20462 : planetWeight
+  const displayWeight = unit === "lbs" ? planetWeight * KG_TO_LBS : planetWeight
 
   return (
     <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
@@ -92,7 +96,7 @@ export default function WeightCalculator({ planetName, weightMultiplier, surface
           <p className="text-3xl font-bold text-white font-mono">
             {planetName === "The Sun"
               ? "N/A"
-              : (numAge * (365.25 / getYearDays(planetName))).toFixed(2)}
+              : (numAge * (EARTH_DAYS_PER_YEAR / getYearDays(planetName))).toFixed(2)}
             <span className="text-lg ml-1" style={{ color }}>{planetName} years</span>
           </p>
         </div>
@@ -103,8 +107,8 @@ export default function WeightCalculator({ planetName, weightMultiplier, surface
 
 function getYearDays(name: string): number {
   const map: Record<string, number> = {
-    "Mercury": 87.97, "Venus": 224.7, "Earth": 365.25, "Mars": 687, "Jupiter": 4333,
+    "Mercury": 87.97, "Venus": 224.7, "Earth": EARTH_DAYS_PER_YEAR, "Mars": 687, "Jupiter": 4333,
     "Saturn": 10759, "Uranus": 30687, "Neptune": 60190, "Pluto": 90560, "The Sun": 1,
   }
-  return map[name] || 365.25
+  return map[name] || EARTH_DAYS_PER_YEAR
 }
