@@ -2,7 +2,9 @@
 
 [![CI](https://github.com/Coded-Vision-Design/WhatsInSpace/actions/workflows/ci-deps-check.yml/badge.svg)](https://github.com/Coded-Vision-Design/WhatsInSpace/actions/workflows/ci-deps-check.yml) [![Deploy](https://github.com/Coded-Vision-Design/WhatsInSpace/actions/workflows/deploy.yml/badge.svg)](https://github.com/Coded-Vision-Design/WhatsInSpace/actions/workflows/deploy.yml) [![CodeQL](https://img.shields.io/badge/CodeQL-scanning-2ea44f?style=flat-square&logo=github&logoColor=white)](https://github.com/Coded-Vision-Design/WhatsInSpace/security/code-scanning) [![Built by Coded Vision Design](https://img.shields.io/badge/Built%20by-Coded%20Vision%20Design-111827?style=flat-square)](https://github.com/Coded-Vision-Design)
 
-Part of the [Coded Vision Design](https://github.com/Coded-Vision-Design) organisation. Org-wide standards: [community profile](https://github.com/Coded-Vision-Design/.github) | [security disclosure](https://github.com/Coded-Vision-Design/.github/blob/main/SECURITY.md)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white) ![PHP](https://img.shields.io/badge/PHP-777BB4?style=flat-square&logo=php&logoColor=white) ![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=nextdotjs&logoColor=white) ![three.js](https://img.shields.io/badge/three.js-000000?style=flat-square&logo=threedotjs&logoColor=white) ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white) [![Live](https://img.shields.io/badge/Live-22C55E?style=flat-square&logo=googlechrome&logoColor=white)](https://whatsthatin.space)
+
+Built and maintained by [Coded Vision Design](https://github.com/Coded-Vision-Design). [Security policy](https://github.com/Coded-Vision-Design/.github/blob/main/SECURITY.md) &middot; [Contributing](https://github.com/Coded-Vision-Design/.github/blob/main/CONTRIBUTING.md) &middot; [Code of conduct](https://github.com/Coded-Vision-Design/.github/blob/main/CODE_OF_CONDUCT.md)
 
 <!-- END: cvd-org-header -->
 # What's That In Space?
