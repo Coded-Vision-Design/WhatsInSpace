@@ -235,7 +235,7 @@ const Particles: React.FC<ParticlesProps> = ({
         container.removeChild(gl.canvas);
       }
     };
-    // eslint-disable-next-line
+     
   }, [
     particleCount,
     particleSpread,
