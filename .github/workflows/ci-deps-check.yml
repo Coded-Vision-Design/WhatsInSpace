@@ -76,7 +76,13 @@ jobs:
             corepack enable
             pnpm install --no-frozen-lockfile --ignore-scripts
             [ -f prisma/schema.prisma ] && pnpm exec prisma generate || true
-            pnpm run build --if-present
+            # pnpm has no --if-present flag and forwards it to the script, so
+            # `next build --if-present` aborts. Probe for the script instead.
+            if node -e "process.exit(require('./package.json').scripts?.build ? 0 : 1)"; then
+              pnpm run build
+            else
+              echo "No build script - skipping"
+            fi
           else
             if [ -f package-lock.json ]; then
               npm ci --ignore-scripts || npm install --ignore-scripts --no-audit --no-fund
