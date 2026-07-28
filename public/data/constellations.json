@@ -1,0 +1,28 @@
+{
+  "note": "A few recognisable constellation line sets, by star name (must exist in bright-stars.json).",
+  "constellations": [
+    {
+      "name": "Orion",
+      "lines": [
+        ["Betelgeuse", "Bellatrix"], ["Betelgeuse", "Alnitak"], ["Bellatrix", "Mintaka"],
+        ["Alnitak", "Alnilam"], ["Alnilam", "Mintaka"], ["Alnitak", "Saiph"],
+        ["Mintaka", "Rigel"], ["Saiph", "Rigel"]
+      ]
+    },
+    {
+      "name": "Ursa Major (the Plough)",
+      "lines": [
+        ["Dubhe", "Merak"], ["Merak", "Phecda"], ["Phecda", "Megrez"], ["Megrez", "Dubhe"],
+        ["Megrez", "Alioth"], ["Alioth", "Mizar"], ["Mizar", "Alkaid"]
+      ]
+    },
+    {
+      "name": "Crux",
+      "lines": [["Acrux", "Gacrux"], ["Mimosa", "Imai"]]
+    },
+    {
+      "name": "Cassiopeia",
+      "lines": [["Caph", "Schedar"], ["Schedar", "Navi"], ["Navi", "Ruchbah"], ["Ruchbah", "Segin"]]
+    }
+  ]
+}

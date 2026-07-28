@@ -8,7 +8,9 @@
     "lint": "eslint .",
     "spell": "cspell \"**/*.{ts,tsx,md}\" --no-progress",
     "spell:fix": "cspell \"**/*.{ts,tsx,md}\" --no-progress --show-suggestions",
-    "start": "next start"
+    "start": "next start",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.2.0",
@@ -16,14 +18,17 @@
     "@fortawesome/react-fontawesome": "^3.3.0",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.5.0",
+    "@react-three/postprocessing": "^3.0.4",
     "@types/three": "^0.183.1",
+    "astronomy-engine": "^2.1.19",
     "autoprefixer": "^10.4.20",
     "globe.gl": "^2.45.3",
     "lucide-react": "^1.8.0",
-    "next": "16.2.6",
+    "next": "16.2.12",
     "ogl": "^1.0.11",
     "react": "19.2.0",
     "react-dom": "19.2.0",
+    "satellite.js": "^7.0.1",
     "three": "^0.183.2"
   },
   "devDependencies": {
@@ -35,15 +40,18 @@
     "@types/react-dom": "^19",
     "cspell": "^10.0.0",
     "eslint": "^10.2.0",
-    "postcss": "^8.5.15",
+    "postcss": "^8.5.18",
     "tailwindcss": "^4.1.9",
     "tw-animate-css": "1.3.3",
     "typescript": "^6",
-    "typescript-eslint": "^8.58.1"
+    "typescript-eslint": "^8.58.1",
+    "vitest": "^4.1.9"
   },
   "pnpm": {
     "overrides": {
-      "postcss@<8.5.10": ">=8.5.10"
+      "postcss": "^8.5.18",
+      "brace-expansion": "^5.0.8",
+      "sharp": "^0.35.0"
     }
   }
 }
