@@ -227,6 +227,7 @@ export default function Header({ alwaysVisible = false }: HeaderProps) {
             </div>
           </div>
           <Link href="/iss/" className="text-white/50 hover:text-white text-sm transition-colors hover-underline">ISS</Link>
+          <Link href="/portal/" className="text-white/50 hover:text-white text-sm transition-colors hover-underline">Sky Portal</Link>
           <Link href="/news/" className="text-white/50 hover:text-white text-sm transition-colors hover-underline">News</Link>
           <Link href="/" onClick={(e) => handleHashClick(e, "trajectory")} className="text-white/50 hover:text-white text-sm transition-colors hover-underline">Flight Path</Link>
         </nav>
@@ -366,6 +367,15 @@ export default function Header({ alwaysVisible = false }: HeaderProps) {
               className="block py-3.5 text-center text-white/70 hover:text-white text-[15px] font-medium border-b border-white/[0.06] transition-colors"
             >
               ISS
+            </Link>
+
+            {/* Sky Portal */}
+            <Link
+              href="/portal/"
+              onClick={() => setMobileOpen(false)}
+              className="block py-3.5 text-center text-white/70 hover:text-white text-[15px] font-medium border-b border-white/[0.06] transition-colors"
+            >
+              Sky Portal
             </Link>
 
             {/* News */}
