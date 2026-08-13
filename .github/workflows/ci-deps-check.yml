@@ -45,6 +45,10 @@ concurrency:
 jobs:
   verify:
     runs-on: ubuntu-latest
+    # Without this the job inherits GitHub's 6h default. A hanging install or
+    # build (e.g. a next build that never completes) would otherwise pin a
+    # runner for six hours instead of failing fast.
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
 
