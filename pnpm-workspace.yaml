@@ -1,15 +1,22 @@
 # Dependency overrides.
 #
-# These live here rather than under the "pnpm" key in package.json because
-# pnpm 11 no longer reads that field, and CI resolves pnpm via corepack
-# without a pinned version. Keeping them here means both pnpm 10 and 11
-# honour the pinned resolutions.
+# This is the single source of truth for override resolutions. Do NOT also
+# add a "pnpm.overrides" block to package.json: with both present, package.json
+# wins and these are silently ignored (which is how brace-expansion regressed
+# to a vulnerable 5.0.8 and the nanoid pin failed to apply). pnpm is pinned to
+# 10.30.3 via packageManager, and 10.x reads overrides from here.
 overrides:
   postcss@<8.5.10: '>=8.5.10'
-  # DoS via exponential-time expansion of consecutive non-expanding {} groups.
-  # Reached through minimatch -> eslint.
-  brace-expansion@<5.0.6: '>=5.0.6'
+  # DoS via exponential-time expansion of consecutive non-expanding {} groups
+  # (<5.0.6) and DoS via unbounded intermediate allocation (<5.0.9). Reached
+  # through minimatch -> eslint.
+  brace-expansion@<5.0.9: '>=5.0.9'
   # Inherited libvips CVE-2026-33327, CVE-2026-33328, CVE-2026-35590,
   # CVE-2026-35591. Optional dependency of next, which pins ^0.34.5, so the
   # override is the only way onto a patched release before next 16.3.
   sharp@<0.35.3: '>=0.35.3'
+  # Custom generators can loop indefinitely when size is zero. Reached
+  # through postcss, which pins nanoid ^3.3.16. Capped to the 3.x line: a
+  # bare '>=3.3.17' resolves to nanoid 6.x, which is ESM-only and breaks
+  # postcss's CommonJS require().
+  nanoid@<3.3.17: '^3.3.17'
