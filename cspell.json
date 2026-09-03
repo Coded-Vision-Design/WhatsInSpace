@@ -115,7 +115,25 @@
     "tabular",
     "gtag",
     "googletagmanager",
-    "MGJBLHGP"
+    "MGJBLHGP",
+
+    "chartemus",
+    "webserial",
+    "celestrak",
+    "isstle",
+    "satrec",
+    "twoline",
+    "gmst",
+    "gstime",
+    "ofdate",
+    "quat",
+    "spect",
+    "conj",
+    "calib",
+    "recenter",
+    "replug",
+    "scanline",
+    "eskil"
   ],
   "ignorePaths": [
     "node_modules",

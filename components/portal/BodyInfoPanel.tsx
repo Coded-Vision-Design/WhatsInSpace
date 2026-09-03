@@ -74,7 +74,7 @@ export default function BodyInfoPanel({ body, star, onClose, onTravel }: {
               <Stat label="Surface gravity" value={`${data.surfaceGravity} m/s²`} />
               <Stat label="Moons" value={`${data.moons}`} />
               <Stat label="Day length" value={`${data.dayLengthHours} h`} />
-              <Stat label="Year length" value={data.yearLengthDays ? `${data.yearLengthDays} days` : "—"} />
+              <Stat label="Year length" value={data.yearLengthDays ? `${data.yearLengthDays} days` : "-"} />
               <Stat label="Avg temp" value={`${data.surfaceTempC.avg}°C`} />
               <Stat label="Distance from Sun" value={`${data.distanceFromSunKm} km`} />
             </div>
