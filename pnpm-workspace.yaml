@@ -23,3 +23,10 @@ overrides:
   # Recursive copy follows symlinked files and copies data from outside the
   # source tree (<0.16.8). Reached through eslint.
   '@humanfs/node@<0.16.8': '>=0.16.8'
+  # unzipSync can loop indefinitely on malformed ZIP64 archives. Two distinct
+  # consumers pull two distinct majors, each kept within its own line so the
+  # three.js loaders keep the API they expect:
+  #   three-stdlib -> fflate 0.6.10 (needs >=0.6.11)
+  #   @types/three (three ecosystem) -> fflate 0.8.2 (needs >=0.8.3)
+  fflate@<0.6.11: '~0.6.11'
+  fflate@>=0.8.0 <0.8.3: '~0.8.3'
