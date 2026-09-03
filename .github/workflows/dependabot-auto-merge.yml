@@ -46,7 +46,12 @@ jobs:
         if: steps.tools.outputs.prettier == '1' || steps.tools.outputs.eslint == '1'
         run: |
           if [ -f pnpm-lock.yaml ]; then
-            npm install -g pnpm@9
+            # Use the repo's pinned pnpm via corepack. A hardcoded pnpm@9
+            # aborts with "packages field missing or empty" on a
+            # pnpm-workspace.yaml that only carries overrides (no packages:),
+            # which failed this job and, via `needs: format-fix`, skipped
+            # auto-merge on every Dependabot PR.
+            corepack enable
             pnpm install --frozen-lockfile --ignore-scripts
           elif [ -f yarn.lock ]; then
             yarn install --frozen-lockfile --ignore-scripts
