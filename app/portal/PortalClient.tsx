@@ -282,7 +282,7 @@ export default function PortalClient() {
               Alt <b style={{ color: "#cfe3ff" }}>{aim.alt.toFixed(1)}°</b> · Az <b style={{ color: "#cfe3ff" }}>{aim.az.toFixed(1)}°</b>
             </div>
             <div style={{ fontSize: 18, color: aim.name ? "#9fd2ff" : "#46566f", fontWeight: 600, minHeight: 24 }}>
-              {aim.name || "—"}
+              {aim.name || "-"}
             </div>
             <button style={{ ...btnSmall, justifySelf: "start", marginTop: 4 }} onClick={selectCurrentAim}>Identify ⏎</button>
             {c.kind === "mock" && <div style={{ fontSize: 11, color: "#5a6b86" }}>drag to look around</div>}
