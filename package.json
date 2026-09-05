@@ -29,7 +29,7 @@
     "ogl": "^1.0.11",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "satellite.js": "^6.0.2",
+    "satellite.js": "^7.1.0",
     "three": "^0.185.1"
   },
   "devDependencies": {
