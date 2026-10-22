@@ -6,27 +6,32 @@
 # to a vulnerable 5.0.8 and the nanoid pin failed to apply). pnpm is pinned to
 # 10.30.3 via packageManager, and 10.x reads overrides from here.
 overrides:
-  postcss@<8.5.10: '>=8.5.10'
+  postcss@<8.5.10: ">=8.5.10"
   # DoS via exponential-time expansion of consecutive non-expanding {} groups
   # (<5.0.6) and DoS via unbounded intermediate allocation (<5.0.9). Reached
   # through minimatch -> eslint.
-  brace-expansion@<5.0.9: '>=5.0.9'
+  brace-expansion@<5.0.9: ">=5.0.9"
   # Inherited libvips CVE-2026-33327, CVE-2026-33328, CVE-2026-35590,
   # CVE-2026-35591. Optional dependency of next, which pins ^0.34.5, so the
   # override is the only way onto a patched release before next 16.3.
-  sharp@<0.35.3: '>=0.35.3'
+  sharp@<0.35.3: ">=0.35.3"
   # Custom generators can loop indefinitely when size is zero. Reached
   # through postcss, which pins nanoid ^3.3.16. Capped to the 3.x line: a
   # bare '>=3.3.17' resolves to nanoid 6.x, which is ESM-only and breaks
   # postcss's CommonJS require().
-  nanoid@<3.3.17: '^3.3.17'
+  nanoid@<3.3.17: "^3.3.17"
   # Recursive copy follows symlinked files and copies data from outside the
   # source tree (<0.16.8). Reached through eslint.
-  '@humanfs/node@<0.16.8': '>=0.16.8'
+  "@humanfs/node@<0.16.8": ">=0.16.8"
   # unzipSync can loop indefinitely on malformed ZIP64 archives. Two distinct
   # consumers pull two distinct majors, each kept within its own line so the
   # three.js loaders keep the API they expect:
   #   three-stdlib -> fflate 0.6.10 (needs >=0.6.11)
   #   @types/three (three ecosystem) -> fflate 0.8.2 (needs >=0.8.3)
-  fflate@<0.6.11: '~0.6.11'
-  fflate@>=0.8.0 <0.8.3: '~0.8.3'
+  fflate@<0.6.11: "~0.6.11"
+  fflate@>=0.8.0 <0.8.3: "~0.8.3"
+  # launch-editor existence check bypass, argument escaping and CLI flag misinterpretation
+  # (CVE-2026-112941, CVE-2026-112942, CVE-2026-112943 / GHSA-698v-4r3x-3vcv,
+  # GHSA-587h-7wmj-h5pm, GHSA-9ph6-52p2-j559). Reached through vite -> vitest.
+  vite@>=8.0.0 <=8.1.5: ">=8.1.6"
+  launch-editor@<2.14.2: ">=2.14.2"
