@@ -46,12 +46,7 @@ jobs:
         if: steps.tools.outputs.prettier == '1' || steps.tools.outputs.eslint == '1'
         run: |
           if [ -f pnpm-lock.yaml ]; then
-            # Use the repo's pinned pnpm via corepack. A hardcoded pnpm@9
-            # aborts with "packages field missing or empty" on a
-            # pnpm-workspace.yaml that only carries overrides (no packages:),
-            # which failed this job and, via `needs: format-fix`, skipped
-            # auto-merge on every Dependabot PR.
-            corepack enable
+            npm install -g pnpm@9
             pnpm install --frozen-lockfile --ignore-scripts
           elif [ -f yarn.lock ]; then
             yarn install --frozen-lockfile --ignore-scripts
@@ -90,7 +85,7 @@ jobs:
     steps:
       - name: Fetch Dependabot metadata
         id: meta
-        uses: dependabot/fetch-metadata@v3
+        uses: dependabot/fetch-metadata@v2
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
 
