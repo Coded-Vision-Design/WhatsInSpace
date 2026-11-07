@@ -1,0 +1,8 @@
+diff --git a/dist/index.js b/dist/index.js
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -10,4 +10,3 @@
+ export * from './shadow.js';
+ export { SatRecError } from './propagation/SatRec.js';
+ export * from './common-types.js';
+-export * from './wasm/index.js';

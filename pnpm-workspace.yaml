@@ -35,3 +35,9 @@ overrides:
   # GHSA-587h-7wmj-h5pm, GHSA-9ph6-52p2-j559). Reached through vite -> vitest.
   vite@>=8.0.0 <=8.1.5: ">=8.1.6"
   launch-editor@<2.14.2: ">=2.14.2"
+  # minimatch pattern amplification DoS (CVE-2026-118764 / GHSA-g3hv-75wg-m249).
+  # Reached through eslint -> @eslint/config-array and @typescript-eslint.
+  minimatch@<11.0.1: ">=11.0.4"
+
+patchedDependencies:
+  satellite.js@7.1.0: patches/satellite.js@7.1.0.patch
